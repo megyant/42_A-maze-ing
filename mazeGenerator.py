@@ -33,7 +33,7 @@ class MazeGenerator:
         if y < self.height - 1 and (x, y + 1) not in self.visited:
             neighbors.append((x, y + 1, "S"))
 
-        if x < 0 and (x - 1, y) not in self.visited:
+        if x > 0 and (x - 1, y) not in self.visited:
             neighbors.append((x - 1, y, "W"))
 
         if y < self.height - 1 and (x + 1, y) not in self.visited:
@@ -96,11 +96,11 @@ class MazeGenerator:
                     self.grid[current_y][current_x] -= 4
                     self.grid[next_y][next_x] -= 1
 
-                elif direction == "N":
+                elif direction == "E":
                     self.grid[current_y][current_x] -= 2
                     self.grid[next_y][next_x] -= 8
 
-                elif direction == "N":
+                elif direction == "W":
                     self.grid[current_y][current_x] -= 8
                     self.grid[next_y][next_x] -= 2
 
@@ -131,7 +131,7 @@ class MazeGenerator:
                     ((x, y - 1), "N", 1),
                     ((x + 1, y), "E", 2),
                     ((x, y + 1), "S", 4),
-                    ((x - 1, y), "O", 8),
+                    ((x - 1, y), "W", 8),
             ]
 
             for neighbor, char, bit in directions:
