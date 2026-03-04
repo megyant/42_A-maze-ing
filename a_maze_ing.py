@@ -90,6 +90,10 @@ def main() -> None:
         gen = MazeGenerator(width, height, seed=seed)
         gen.generate(entry)
 
+        # MADE BY AI DELETE AFTER
+        print("\nGenerated Maze:")
+        gen.display()
+
         path_str = gen.find_path(entry, exit_point)
 
     except Exception:

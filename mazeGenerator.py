@@ -149,3 +149,25 @@ class MazeGenerator:
                 break
 
         return "".join(reversed(path_list))
+
+    # MADE BY AI DELETE LATER JUST TO CHECK HOW TO MAKE ASCII ART
+    def display(self) -> None:
+        # Top border
+        print("+" + "---+" * self.width)
+        for y in range(self.height):
+            line1 = "|"
+            line2 = "+"
+            for x in range(self.width):
+                val = self.grid[y][x]
+                # Check East Wall (bit 2)
+                if val & 2:
+                    line1 += "   |"
+                else:
+                    line1 += "    "
+                # Check South Wall (bit 4)
+                if val & 4:
+                    line2 += "---+"
+                else:
+                    line2 += "   +"
+            print(line1)
+            print(line2)

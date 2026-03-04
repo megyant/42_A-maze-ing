@@ -1,2 +1,2 @@
-# 42_A-maze-ing
+# A-maze-ing
 Maze creation algorithm
