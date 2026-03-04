@@ -1,5 +1,4 @@
 PYTHON = python3
-PIP = pip
 SRC = a_maze_ing.py
 CONFIG = config.txt
 
@@ -23,7 +22,7 @@ flake8:
 	-$(PYTHON) -m flake8 .
 
 mypy:
-	-$(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disalow-untyped-defs --check untyped-defs
+	-$(PYTHON) -m mypy . --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict: flake8 mypy-strict
 
