@@ -35,7 +35,7 @@ def parse_config(file_path: str) -> Dict[str, Any]:
                 # Changed print to ValueError
 
                 key, value = line.split('=', 1)
-                config[key.strip().upper()] = value.strip
+                config[key.strip().upper()] = value.strip()
 
         check_mandatory_keys(config)
         return config
@@ -50,6 +50,8 @@ def parse_config(file_path: str) -> Dict[str, Any]:
 
     except Exception as e:
         print(f"Error: An unexpected error occurred: {e}")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
 
@@ -82,7 +84,7 @@ def main() -> None:
             print("Error: ENTRY point is out of maze bounds")
             sys.exit(1)
         if not (0 <= exit_point[0] < width and 0 <= exit_point[1] < height):
-            print("Error: ENTRY point is out of maze bounds")
+            print("Error: EXIT point is out of maze bounds")
             sys.exit(1)
 
         gen = MazeGenerator(width, height, seed=seed)
@@ -92,6 +94,8 @@ def main() -> None:
 
     except Exception:
         print("Error: An unexpected error occurred")
+        import traceback
+        traceback.print_exc()
         sys.exit(1)
 
     try:

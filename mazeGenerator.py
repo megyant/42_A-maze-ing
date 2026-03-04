@@ -22,21 +22,18 @@ class MazeGenerator:
         self.stack: List[Tuple[int, int]] = []
         self.visited: Set[Tuple[int, int]] = set()
 
-    def _get_unvisited_neighbors(self,  # Method name not very clear
-                                 x: int,
+    def _get_unvisited_neighbors(self, x: int,
                                  y: int) -> List[Tuple[int, int, str]]:
+
         neighbors: List[Tuple[int, int, str]] = []
 
         if y > 0 and (x, y - 1) not in self.visited:
             neighbors.append((x, y - 1, "N"))
-
         if y < self.height - 1 and (x, y + 1) not in self.visited:
             neighbors.append((x, y + 1, "S"))
-
         if x > 0 and (x - 1, y) not in self.visited:
             neighbors.append((x - 1, y, "W"))
-
-        if y < self.height - 1 and (x + 1, y) not in self.visited:
+        if x < self.width - 1 and (x + 1, y) not in self.visited:
             neighbors.append((x + 1, y, "E"))
 
         return neighbors
@@ -107,8 +104,8 @@ class MazeGenerator:
                 self.visited.add((next_x, next_y))
                 self.stack.append((next_x, next_y))
 
-        else:
-            self.stack.pop()
+            else:
+                self.stack.pop()
 
     def find_path(self, start: Tuple[int, int], end: Tuple[int, int]) -> str:
 
@@ -142,10 +139,13 @@ class MazeGenerator:
 
         current = end
 
-        while current != start:
+        while current != start and current in parent:
             entry = parent[current]
             if entry is not None:
-                current, char = entry
+                current_node, char = entry
                 path_list.append(char)
+                current = current_node
+            else:
+                break
 
         return "".join(reversed(path_list))
