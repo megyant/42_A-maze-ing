@@ -90,13 +90,12 @@ def main() -> None:
         gen = MazeGenerator(width, height, seed=seed)
         gen.generate(entry)
 
-        # MADE BY AI DELETE AFTER
         path_str = gen.find_path(entry, exit_point)
+
+        # MADE BY AI DELETE AFTER
 
         print("\nVisualizing Maze with Path:")
         gen.display(path_str=path_str, start_pos=entry)
-
-        path_str = gen.find_path(entry, exit_point)
 
     except Exception:
         print("Error: An unexpected error occurred")

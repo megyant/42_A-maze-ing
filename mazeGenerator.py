@@ -150,7 +150,7 @@ class MazeGenerator:
 
         return "".join(reversed(path_list))
 
-    # MADE BY AI DELETE LATER JUST TO CHECK HOW TO MAKE ASCII ART
+# MADE BY AI DELETE LATER JUST TO CHECK HOW TO MAKE ASCII ART
     def display(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)) -> None:
         # 1. Convert the path string into a set of (x, y) coordinates for quick lookup
         path_coords = set()
