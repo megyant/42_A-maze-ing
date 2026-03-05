@@ -91,8 +91,10 @@ def main() -> None:
         gen.generate(entry)
 
         # MADE BY AI DELETE AFTER
-        print("\nGenerated Maze:")
-        gen.display()
+        path_str = gen.find_path(entry, exit_point)
+
+        print("\nVisualizing Maze with Path:")
+        gen.display(path_str=path_str, start_pos=entry)
 
         path_str = gen.find_path(entry, exit_point)
 
