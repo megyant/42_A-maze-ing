@@ -79,9 +79,7 @@ def rui_alexandre_version(maze: Display_Maze, path: str, config: str,
 
 def version1() -> None:
 
-    print("Maze being generated using config.txt")
-
-    maze_color = input("Change wall color? (Y/N): ")
+    maze_color = input("\nChange wall color? (Y/N): ")
 
     if maze_color == 'y' or maze_color == 'Y':
         print("wall color changed")
