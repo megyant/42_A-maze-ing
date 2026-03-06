@@ -19,7 +19,7 @@ def main() -> None:
     print("\033[2J\033[H", end="", flush=True)
     print("\n=== Version 1 ===\n")
     maze.render()
-    #path_str=path_str, start_pos=entry
+    # path_str=path_str, start_pos=entry
     version1()
 
     print("\033[2J\033[H", end="", flush=True)
