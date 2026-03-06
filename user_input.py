@@ -17,18 +17,25 @@ def main() -> None:
     path_str = maze.find_path(entry, exit_point)
 
     print("\033[2J\033[H", end="", flush=True)
-    print("\n=== Version 1 ===\n")
-    maze.render()
-    # path_str=path_str, start_pos=entry
-    version1()
+
+    if input("start next version? ").lower() == "y":
+
+        print("\n=== Version 1 ===\n")
+        version1(maze, path_str, config)
+    else:
+        exit
 
     print("\033[2J\033[H", end="", flush=True)
 
-    print("\n=== Version 2 ===\n")
+    if input("start next version? ").lower() == "y":
+        print("\n=== Version 2 ===\n")
 
-    maze.build()
-    maze.render()
-    rui_alexandre_version(maze, path_str, config)
+        maze.build()
+        maze.render()
+        rui_alexandre_version(maze, path_str, config)
+
+    else:
+        exit
 
 
 def rui_alexandre_version(maze: Display_Maze, path: str, config: str,
@@ -77,14 +84,29 @@ def rui_alexandre_version(maze: Display_Maze, path: str, config: str,
         print(f"oops something went wrong: {e}")
 
 
-def version1() -> None:
+def version1(maze: Display_Maze, path: str, config: str,
+             start_pos: Tuple[int, int] = (0, 0)) -> None:
 
-    maze_color = input("\nChange wall color? (Y/N): ")
+    width = int(config.get("WIDTH", 10))
+    height = int(config.get("HEIGHT", 10))
+    exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
 
-    if maze_color == 'y' or maze_color == 'Y':
-        print("wall color changed")
-    else:
-        print("Oh noo! :(")
+    current_path = path
+
+    try:
+        while True:
+
+            if input("\nCreate a new maze? (y/n): ").lower() == 'y':
+                maze.build()
+                current_path = maze.find_path(start=start_pos, end=exit_point)
+                print("\033[2J\033[H", end="", flush=True)
+                print("\n=== Version 1 ===\n")
+                maze.render()
+                len(current_path)
+            else:
+                print("Oh noo! :(")
+    except Exception as e:
+        print(f"oops something went wrong: {e}")
 
 
 main()
