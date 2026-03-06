@@ -181,7 +181,7 @@ class MazeGenerator:
                     line1 += cell_content + "|"
                 else:
                     line1 += cell_content + " "
- 
+
                 # Check South Wall (bit 4)
                 if val & 4:
                     line2 += "---+"
@@ -189,3 +189,22 @@ class MazeGenerator:
                     line2 += "   +"
             print(line1)
             print(line2)
+
+
+class Maze(MazeGenerator):
+    def __init__(self, width: int, height: int,
+                 seed: Optional[int] = None) -> None:
+        super().__init__(width, height, seed)
+        self.wall_color = "white"
+
+    def build(self):
+        self.generate((0, 0))
+        self.generated = True
+
+
+class Display_Maze(Maze):
+    def __init__(self, width: int, height: int):
+        super().__innit__(width, height)
+
+    def render(self):
+        self.display()

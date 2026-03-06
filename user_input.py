@@ -1,3 +1,11 @@
+from mazeGenerator import MazeGenerator
+
+class maze_alterations:
+    def __init__(self, maze: MazeGenerator, path: list[str])
+
+
+
+
 def version1() -> None:
     print("Maze being generated using config.txt")
 
@@ -20,4 +28,6 @@ def version1() -> None:
         print("Oh noo! :(")
 
 
+def rui_alexandre_version() -> None:
+    maz
 version1()
