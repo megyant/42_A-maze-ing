@@ -207,6 +207,7 @@ class Display_Maze(Maze):
     def __init__(self, width: int, height: int,
                  seed: Optional[int] = None) -> None:
         super().__init__(width, height)
+        self.show_path = False
 
     def render(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)):
         self.display(path_str=path_str, start_pos=start_pos)
