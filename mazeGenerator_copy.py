@@ -198,6 +198,11 @@ class Maze(MazeGenerator):
         self.wall_color = "white"
 
     def build(self):
+        self. grid = [[15 for _ in range(self.width)]  # magic number 15
+                      for _ in range(self.height)]
+        self.visited = set()
+        self.stack = []
+
         self.generate((0, 0))
         self.generated = True
 

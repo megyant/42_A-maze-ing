@@ -66,7 +66,8 @@ def version1(maze: Display_Maze, path: str, config: str,
 
                 if new_maze == 'y':
                     maze.build()
-                    current_path = maze.find_path(start=start_pos, end=exit_point)
+                    current_path = maze.find_path(start=start_pos,
+                                                  end=exit_point)
                     print("\033[2J\033[H", end="", flush=True)
                     print("\n=== Version 1 ===\n")
                     maze.render()
@@ -80,15 +81,16 @@ def version1(maze: Display_Maze, path: str, config: str,
                     continue
 
             while True:
-                path = input("\nShow/unshow shortest path available? (p/continue/q): ").lower()
+                path = input("\nShow/unshow shortest path available? "
+                             "(p/continue/q): ").lower()
 
                 if path == 'p':
                     print("\033[2J\033[H", end="", flush=True)
                     print("\n=== Version 1 ===\n")
-                    if maze.show_path == False:
+                    if maze.show_path is False:
                         maze.render(path_str=current_path, start_pos=start_pos)
                         maze.show_path = True
-                    elif maze.show_path == True:
+                    elif maze.show_path is True:
                         maze.render()
                         maze.show_path = False
                 elif path == 'continue':
@@ -101,14 +103,14 @@ def version1(maze: Display_Maze, path: str, config: str,
 
             while True:
                 color = input("\nChange maze color? (y/n/q): ").lower()
-                
+
                 if color == 'y':
                     maze.wall_color = "example"
                     print("\033[2J\033[H", end="", flush=True)
                     print("\n=== Version 2 ===\n")
                     maze.render()
-                    print("Color changed")   
-                    break    
+                    print("Color changed")
+                    break
                 elif color == 'n':
                     break
                 elif color == 'q':
@@ -153,10 +155,10 @@ def rui_alexandre_version(maze: Display_Maze, path: str, config: str,
             elif command == 'p':
                 print("\033[2J\033[H", end="", flush=True)
                 print("\n=== Version 2 ===\n")
-                if maze.show_path == False:
+                if maze.show_path is False:
                     maze.render(path_str=current_path, start_pos=start_pos)
                     maze.show_path = True
-                elif maze.show_path == True:
+                elif maze.show_path is True:
                     maze.render()
                     maze.show_path = False
 
@@ -178,7 +180,7 @@ def rui_alexandre_version(maze: Display_Maze, path: str, config: str,
 
 def version3(maze: Display_Maze, path: str, config: str,
              start_pos: Tuple[int, int] = (0, 0)) -> None:
-    
+
     width = int(config.get("WIDTH", 10))
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
@@ -199,30 +201,30 @@ def version3(maze: Display_Maze, path: str, config: str,
             if command == 'q' or command == '--quit':
                 break
 
-            elif command == 'm'or command == '--maze':
+            elif command == 'm' or command == '--maze':
                 maze.build()
                 current_path = maze.find_path(start=start_pos, end=exit_point)
                 print("\033[2J\033[H", end="", flush=True)
-                print("\n=== Version 2 ===\n")
+                print("\n=== Version 3 ===\n")
                 maze.render()
 
             elif command == 'p' or command == '--path':
                 print("\033[2J\033[H", end="", flush=True)
-                print("\n=== Version 2 ===\n")
-                if maze.show_path == False:
+                print("\n=== Version 3 ===\n")
+                if maze.show_path is False:
                     maze.render(path_str=current_path, start_pos=start_pos)
                     maze.show_path = True
-                elif maze.show_path == True:
+                elif maze.show_path is True:
                     maze.render()
                     maze.show_path = False
 
             elif command == 'c' or command == '--color':
                 maze.wall_color = "example"
                 print("\033[2J\033[H", end="", flush=True)
-                print("\n=== Version 2 ===\n")
+                print("\n=== Version 3 ===\n")
                 maze.render()
                 print("Color changed")
-            
+
             elif command == 'clear' or command == '--clear':
                 print("\033[2J\033[H", end="", flush=True)
 
@@ -230,8 +232,9 @@ def version3(maze: Display_Maze, path: str, config: str,
                 print("\033[7A\r\033[J", end="")
                 print("\nInvalid command. Try again")
                 continue
-    
+
     except Exception as e:
         print(f"oops something went wrong: {e}")
+
 
 main()
