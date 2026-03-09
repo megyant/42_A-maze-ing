@@ -15,6 +15,7 @@
 ## Resources
 - What part of the code is reusable and how
 - Have you used any specific tools? Which ones?
+- $Gemini v3, Used to understand the maze mathematics and understanding the translation of bits to hexadecimals$
 
 ## Team and project management
 - Team and project management with:
