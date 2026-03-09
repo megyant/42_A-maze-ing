@@ -40,6 +40,7 @@ def main() -> None:
     print("\033[2J\033[H", end="", flush=True)
 
     if input("start version 3? ").lower() == "y":
+        print("\033[2J\033[H", end="", flush=True)
         print("\n=== Version 3 ===\n")
 
         maze.build()
@@ -188,10 +189,11 @@ def version3(maze: Display_Maze, path: str, config: str,
     current_path = path
 
     try:
+        lines = False
         while True:
             prompt = ("Available options:\n"
                       " . m or --maze: generate a new maze\n"
-                      " . p or --path: show/unshow shortest path available\n"
+                      " . p or --path: show/hide shortest path available\n"
                       " . c or --color: change maze color\n"
                       " . q or --quit: exit configuration mode\n"
                       " . clear or --clear: clear maze\n"
@@ -207,6 +209,7 @@ def version3(maze: Display_Maze, path: str, config: str,
                 print("\033[2J\033[H", end="", flush=True)
                 print("\n=== Version 3 ===\n")
                 maze.render()
+                lines = False
 
             elif command == 'p' or command == '--path':
                 print("\033[2J\033[H", end="", flush=True)
@@ -217,6 +220,7 @@ def version3(maze: Display_Maze, path: str, config: str,
                 elif maze.show_path is True:
                     maze.render()
                     maze.show_path = False
+                lines = False
 
             elif command == 'c' or command == '--color':
                 maze.wall_color = "example"
@@ -224,12 +228,18 @@ def version3(maze: Display_Maze, path: str, config: str,
                 print("\n=== Version 3 ===\n")
                 maze.render()
                 print("Color changed")
+                lines = False
 
             elif command == 'clear' or command == '--clear':
                 print("\033[2J\033[H", end="", flush=True)
+                lines = False
 
             else:
-                print("\033[7A\r\033[J", end="")
+                if lines is True:
+                    print("\033[10A\r\033[J", end="")
+                elif lines is False:
+                    print("\033[8A\r\033[J", end="")
+                    lines = True
                 print("\nInvalid command. Try again")
                 continue
 
