@@ -2,6 +2,10 @@
 
 *This project has been created as a part of the 42 curriculum by <dtalapan>dtalapan, <mbotelho>mbotelho*
 
+**GitHub Profiles**:
+ - dtalapan: https://github.com/dtalapan
+ - mbotelho: https://github.com/megyant
+
 ## Description
 
 A-maze-ing is is a Python-based tool designed to explore the mechanics of procedural maze generation. By visualizing these algorithms, users can gain a deeper understanding of graph theory, stack-based recursion, and data encoding (such as bit-to-hexadecimal translation).
@@ -47,6 +51,30 @@ Because the algorithm operates on the connectivity between nodes, it is highly v
 
 
 ## Instructions
+
+### Run the program
+
+1. Clone this repository:
+
+```
+git@github.com:megyant/42_A-maze-ing.git a-maze-ing
+cd a-maze-ing
+```
+
+2. Build the program using the provided Makefile:
+
+```
+make all_clean # this will install all dependencies, delete them and run the program
+```
+
+You can also run the program using
+```
+make
+```
+```
+python3 a_maze_ing.py config.txt
+```
+
 - Structure and format of config file
 
 ## Resources
