@@ -14,9 +14,9 @@
 
 ## Resources
 - What part of the code is reusable and how
-- $Class MazeGenerator$
+- *Class MazeGenerator*
 - Have you used any specific tools? Which ones?
-- $Gemini v3, Used to understand the maze mathematics and understanding the translation of bits to hexadecimals$
+- *Gemini v3, Used to understand the maze mathematics and understanding the translation of bits to hexadecimals*
 
 ## Team and project management
 - Team and project management with:
