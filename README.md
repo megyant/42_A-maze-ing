@@ -1,6 +1,6 @@
 # A-maze-ing
 
-*This project has beeen created as a part of the 42 curriculum by <dtalapan>dtalapan, <mbotelho>mbotelho*
+*This project has been created as a part of the 42 curriculum by <dtalapan>dtalapan, <mbotelho>mbotelho*
 
 ## Description
 
