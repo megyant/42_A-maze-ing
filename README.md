@@ -103,25 +103,92 @@ There are some available options to interact with the maze:
   
 ## Code Reusability
 
+For this project the class ```MazeGenerator``` available in the ```MazeGenerator.py``` file can be used as a standalone reusable component. It can be installed via pip:
+  
+//try to turn this into .gz and pip when completed
+  
+### Instatiate and use the generator
+
+```
+from MazeGenerator import MazeGenerator
+
+generator = MazeGenerator(width=30, height=20, seed=10)
+
+entry = (0, 0)
+exit = (28, 18)
+
+maze = maze.generate(start_pos=entry)
+path = maze.find_path(start=entry, end=exit)
+
+```
+  
+**Custom parameters:**
+- width: maze width (number of cells) - int
+- height: maze height (number of cells) - int
+- seed: Number to initiate semi-random generation - int or None
+
+**Access generated structure:**
+
+Access width, height and seed:
+```
+maze.width
+maze.height
+maze.seed
+```
+
+Access grid:
+```
+maze.grid
+```
+// Any others?  
+// BTW is perfect maze working? Its not tried but couldnt fix it  
+
 ## Resources
-- What part of the code is reusable and how
-- *Class MazeGenerator*
-- Have you used any specific tools? Which ones?
-- *Gemini v3, Used to understand the maze mathematics and understanding the translation of bits to hexadecimals*
+- [Jamisbuck's blog](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)  
+- [Maze Generation Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm)  
+- [Fundamentals of Maze Generation](https://www.cs.cmu.edu/~112-n23/notes/student-tp-guides/Mazes.pdf)  
+- [Invent with python](https://inventwithpython.com/recursion/chapter11.html)  
+- [Stack Overflow](https://stackoverflow.com/questions/31326141/bitwise-logic-on-maze-walls)  
+- [Assert not magic](https://www.assertnotmagic.com/2019/03/21/binary-operations/)  
+- [Real Python](https://realpython.com/python-bitwise-operators/)  
 
+### Use of Artificial Intelligence
 
-https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap
+Gemini V3 was used to optimize the development workflow in this project. Some usages include:
+- Assist with the comprehension of bitwise translation
+- Assist with the understanding of maze generation mathemaics
+- Logical improvement of functions
+- Makefile adjustments
+- Improving this README wording
+
+All algorithm and implementation are both authors' own work
 
 ## Team and project management
-- Team and project management with:
-    - Roles of each team member:
-    - Margarida: Organization and README, userinput part and MAKEFILE
-    - Denisa: Algorithm and parsing
-    - Anticipated planning and how it evolved until the end:
-    - Algorithm choice and user interface
-    - What worked and what could be improved:
-    - Workflow and a better user interface
 
+Our project was built on a foundation of clear communication and specialized roles. By dividing responsibilities based on individual strengths, we ensured a streamlined development process.
 
+### Roles and Responsabilities
 
+| **Team Member**           | **Bit** 
+| ----                      | ----   
+| **Denisa (dtalapan)**     | Core Engineering: Developed the maze generation logic, input parsing systems, and pathfinding algorithms.  
+| **Margarida (mbotelho)**  | UX & Infrastructure: Designed the user interface, managed the project lifecycle (Makefile/README), and oversaw task delegation.  
 
+### Development Workflow
+
+The project followed a tiered implementation strategy. Initially, we collaborated to define the core maze logic and pathfinding requirements. Leveraging her experience with Python, Denisa developed the initial "skeleton" of the generation and traversal algorithms.
+
+Following the architectural phase, we conducted a joint code review to optimize performance and ensure logic consistency. User interaction layers and infrastructure were then integrated. The final stage involved rigorous edge-case testing.
+
+### Project Retrospective
+
+ - **Efficient Task Allocation:** Defining clear expectations early on allowed both members to work in parallel without bottlenecks.
+ - Algorithmic Integrity: The choice of algorithm allowed for a strict enforcement of maze rules.
+ - User-Centric Design: The interface was designed to be intuitive, providing clear feedback during the generation and solving processes
+ - Protections: The code is well-protected against invalid configurations and edge-case inputs.
+
+ **What could be improved**
+ - Render: Display is currently limited to ASCII characters.
+ - Maze generation: Only one maze generation algorithm currently supported
+ - Pathfinding: Only one pathfinding algorithm implemented
+ - Animations: There are no real-time visual animations for the generation or solving processes.

@@ -151,7 +151,8 @@ class MazeGenerator:
         return "".join(reversed(path_list))
 
 # MADE BY AI DELETE LATER JUST TO CHECK HOW TO MAKE ASCII ART
-    def display(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)) -> None:
+    def display(self, path_str: str = "",
+                start_pos: Tuple[int, int] = (0, 0)) -> None:
         # 1. Convert the path string into a set of (x, y) coordinates for quick lookup
         path_coords = set()
         if path_str:
@@ -181,7 +182,7 @@ class MazeGenerator:
                     line1 += cell_content + "|"
                 else:
                     line1 += cell_content + " "
-
+ 
                 # Check South Wall (bit 4)
                 if val & 4:
                     line2 += "---+"
@@ -193,8 +194,9 @@ class MazeGenerator:
 
 class Maze(MazeGenerator):
     def __init__(self, width: int, height: int,
-                 seed: Optional[int] = None) -> None:
-        super().__init__(width, height, seed)
+                 seed: Optional[int] = None,
+                 perfect: Optional[bool] = True) -> None:
+        super().__init__(width, height, seed, perfect)
         self.wall_color = "white"
 
     def build(self):
@@ -203,15 +205,16 @@ class Maze(MazeGenerator):
         self.visited = set()
         self.stack = []
 
-        self.generate((0, 0))
+        self.generate((0, 0), perfect=self.perfect)
         self.generated = True
 
 
 class Display_Maze(Maze):
 
     def __init__(self, width: int, height: int,
-                 seed: Optional[int] = None) -> None:
-        super().__init__(width, height)
+                 seed: Optional[int] = None,
+                 perfect: Optional[bool] = True) -> None:
+        super().__init__(width, height, seed, perfect)
         self.show_path = False
 
     def render(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)):

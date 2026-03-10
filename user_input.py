@@ -12,25 +12,27 @@ def main() -> None:
     exit_point = format_cords(config.get("EXIT",
                                          f"{w - 1}, {h - 1}"))
 
-    maze = Display_Maze(width=w, height=h)
+    perfect_str = config.get("PERFECT", "True").strip().lower()
+    perfect = perfect_str == "true"
+
+    maze = Display_Maze(width=w, height=h, perfect=perfect)
     maze.build()
     path_str = maze.find_path(entry, exit_point)
 
     print("\033[2J\033[H", end="", flush=True)
 
+    # Version 1
     if input("start version 1? ").lower() == "y":
-
+        maze.build()
+        path_str = maze.find_path(entry, exit_point)
         print("\n=== Version 1 ===\n")
         version1(maze, path_str, config)
-    else:
-        exit
 
     print("\033[2J\033[H", end="", flush=True)
 
     if input("start version 2? ").lower() == "y":
-        print("\n=== Version 2 ===\n")
-
         maze.build()
+        path_str = maze.find_path(entry, exit_point)
         maze.render()
         rui_alexandre_version(maze, path_str, config)
 
@@ -41,9 +43,8 @@ def main() -> None:
 
     if input("start version 3? ").lower() == "y":
         print("\033[2J\033[H", end="", flush=True)
-        print("\n=== Version 3 ===\n")
-
         maze.build()
+        path_str = maze.find_path(entry, exit_point)
         maze.render()
         version3(maze, path_str, config)
     else:
