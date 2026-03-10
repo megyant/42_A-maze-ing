@@ -59,6 +59,8 @@ Because the algorithm operates on the connectivity between nodes, it is highly v
 ```
 # Clone the repository
 git@github.com:megyant/42_A-maze-ing.git a-maze-ing
+
+# Move inside the repository
 cd a-maze-ing
 ```
 
