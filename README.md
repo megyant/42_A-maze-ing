@@ -182,6 +182,7 @@ Following the architectural phase, we conducted a joint code review to optimize 
 
 ### Project Retrospective
 
+**What went well**
  - **Efficient Task Allocation:** Defining clear expectations early on allowed both members to work in parallel without bottlenecks.
  - Algorithmic Integrity: The choice of algorithm allowed for a strict enforcement of maze rules.
  - User-Centric Design: The interface was designed to be intuitive, providing clear feedback during the generation and solving processes
