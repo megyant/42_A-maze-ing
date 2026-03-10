@@ -111,7 +111,7 @@ For this project the class ```MazeGenerator``` available in the ```MazeGenerator
   
 //try to turn this into .gz and pip when completed
   
-### Instatiate and use the generator
+### Install and use of the Generator
 
 ```
 from MazeGenerator import MazeGenerator
