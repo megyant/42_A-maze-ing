@@ -169,7 +169,7 @@ Our project was built on a foundation of clear communication and specialized rol
 
 ### Roles and Responsabilities
 
-| **Team Member**           | **Bit** 
+| **Team Member**           | **Primary Focus and Contributions** 
 | ----                      | ----   
 | **Denisa (dtalapan)**     | Core Engineering: Developed the maze generation logic, input parsing systems, and pathfinding algorithms.  
 | **Margarida (mbotelho)**  | UX & Infrastructure: Designed the user interface, managed the project lifecycle (Makefile/README), and oversaw task delegation.  
