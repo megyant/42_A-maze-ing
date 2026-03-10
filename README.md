@@ -43,7 +43,9 @@ A cell's value is the sum of its active wall bits. This allows us to store the e
   
 This system is extremely useful since it maps perfectly to Hexadecimal, which means it becomes easier to store large informations of integers to string.  
 
-### Breadth-first search (BFS)
+### Pathfinding Algorithm
+
+**Breadth-first search (BFS)**
 
 BFS is a traversal algorithm that begins at the root node and systematically explores all neighboring nodes at the current depth before moving to the next level. This "layer-by-layer" approach is used to find the shortest path within a graph.  
   
