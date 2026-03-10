@@ -52,30 +52,56 @@ Because the algorithm operates on the connectivity between nodes, it is highly v
 
 ## Instructions
 
-### Run the program
-
-1. Clone this repository:
+### Installation
 
 ```
+# Clone the repository
 git@github.com:megyant/42_A-maze-ing.git a-maze-ing
 cd a-maze-ing
 ```
 
-2. Build the program using the provided Makefile:
+```
+# Install dependencies
+make install
+```
 
+### Execution
 ```
-make all_clean # this will install all dependencies, delete them and run the program
-```
+# Run the maze generator
+make run
 
-You can also run the program using
-```
-make
-```
-```
+# Run with a configuration file
 python3 a_maze_ing.py config.txt
+
+# Run checks (mypy and flake8)
+make lint
 ```
 
-- Structure and format of config file
+### Structure of the Configuration File
+
+```
+# Mandatory
+WIDTH=30                         # Maze width (number of cells) - must be > 0
+HEIGHT=20                        # Maze height (number of cells) - must be > 0
+ENTRY=1,1                        # Entry point coordinates (x, y)
+EXIT=28,18                       # Exit point coordinates (x, y)
+OUTPUT_FILE=output_maze.txt      # Output file
+PERFECT=True                     # If enabled (True) maze will contain exactly one path. False to disable
+
+# Optional
+SEED=10                          # Number to initiate semi-random generation
+```
+
+### Maze Interaction
+
+There are some available options to interact with the maze:
+- m or --maze: generate a new maze
+- p or --path: show/hide shortest path available
+- c or --color: change maze color
+- clear or --clear: clear maze
+- q or --quit: exit configuration mode
+  
+## Code Reusability
 
 ## Resources
 - What part of the code is reusable and how

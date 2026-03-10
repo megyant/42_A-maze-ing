@@ -195,8 +195,8 @@ def version3(maze: Display_Maze, path: str, config: str,
                       " . m or --maze: generate a new maze\n"
                       " . p or --path: show/hide shortest path available\n"
                       " . c or --color: change maze color\n"
-                      " . q or --quit: exit configuration mode\n"
                       " . clear or --clear: clear maze\n"
+                      " . q or --quit: exit configuration mode\n"
                       " command: ")
             command = input(f"\n{prompt}").strip().lower()
 
