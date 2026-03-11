@@ -183,9 +183,9 @@ class MazeGenerator:
                 is_42 = (x, y) in self.pattern_cells
                 c = SPECIAL if is_42 else WHITE
                 if (x, y) == start_pos:
-                    content = f"{GREEN} S {RESET}"
+                    content = f"{GREEN} ⦿ {RESET}"
                 elif end_pos and (x, y) == end_pos:
-                    content = f"{RED} E {RESET}"
+                    content = f"{RED} ⦿ {RESET}"
                 elif (x, y) in path_coords:
                     content = f"{c} ● {RESET}"
                 else:

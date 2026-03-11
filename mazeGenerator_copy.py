@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Tuple, Set, Optional
 from collections import deque
 
 
-class MazeGenerator:
+class MazeGeneratorcopy:
     def __init__(
             self,
             width: int,
@@ -192,7 +192,7 @@ class MazeGenerator:
             print(line2)
 
 
-class Maze(MazeGenerator):
+class Maze(MazeGeneratorcopy):
     def __init__(self, width: int, height: int,
                  seed: Optional[int] = None,
                  perfect: Optional[bool] = True) -> None:
