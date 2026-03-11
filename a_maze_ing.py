@@ -55,56 +55,34 @@ def format_cords(coord_Str: str) -> Tuple[int, int]:
 
 
 def main() -> None:
-    try:  # try for the int()
+    try:
         config = parse_config("config.txt")
-        # Magic Numbers
         width = int(config.get("WIDTH", 10))
         height = int(config.get("HEIGHT", 10))
-        entry = format_cords(config.get("ENTRY", "0,0"))
-        exit_point = format_cords(config.get("EXIT",
-                                             f"{width - 1}, {height - 1}"))
         output_file = config.get("OUTPUT_FILE", "output_maze.txt")
         seed = int(config["SEED"]) if "SEED" in config else None
         is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
         if is_perfect:
             entry = format_cords(config.get("ENTRY", "0,0"))
-            exit_point = format_cords(
-                config.get("EXIT", f"{width - 1},{height - 1}")
-            )
+            exit_point = format_cords(config.get("EXIT", f"{width - 1},{height - 1}"))
         else:
-            entry = (
-                random.randint(0, width - 1),
-                random.randint(0, height - 1)
-            )
-            exit_point = (
-                random.randint(0, width - 1),
-                random.randint(0, height - 1)
-            )
+            entry = (random.randint(0, width - 1), random.randint(0, height - 1))
+            exit_point = (random.randint(0, width - 1), random.randint(0, height - 1))
             while exit_point == entry:
-                exit_point = (
-                    random.randint(0, width - 1),
-                    random.randint(0, height - 1)
-                )
-        # maybe create a custom error and add OR instead of if if
-        if not (0 <= entry[0] < width and 0 <= entry[1] < height):
-            print("Error: ENTRY point is out of maze bounds")
-            sys.exit(1)
-        if not (0 <= exit_point[0] < width and 0 <= exit_point[1] < height):
-            print("Error: EXIT point is out of maze bounds")
-            sys.exit(1)
+                exit_point = (random.randint(0, width - 1), random.randint(0, height - 1))
         gen = MazeGenerator(width, height, seed=seed)
+        entry = gen.ensure_valid_position(entry)
+        exit_point = gen.ensure_valid_position(exit_point)
+        print(f"Before generate: Entry -> {entry}, Exit -> {exit_point}")
         gen.generate(entry)
+        entry = gen.ensure_valid_position(entry)
+        exit_point = gen.ensure_valid_position(exit_point)
+        print(f"After generate: Entry -> {entry}, Exit -> {exit_point}")
         if not is_perfect:
             gen.make_imperfect(chance=0.1)
         path_str = gen.find_path(entry, exit_point)
         print("\nVisualizing Maze with Path:")
         gen.display(path_str=path_str, start_pos=entry, end_pos=exit_point)
-    except Exception:
-        print("Error: An unexpected error occurred")
-        import traceback
-        traceback.print_exc()
-        sys.exit(1)
-    try:
         with open(output_file, 'w') as f:
             for row in gen.grid:
                 f.write("".join(f"{cell:X}" for cell in row) + "\n")
@@ -113,8 +91,12 @@ def main() -> None:
             f.write(f"{exit_point[0]},{exit_point[1]}\n")
             f.write(path_str + "\n")
         print(f"Maze successfully saved to {output_file}")
-    except IOError as e:
-        print(f"Error writing to file: {e}")
+
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        import traceback
+        traceback.print_exc()
+        sys.exit(1)
 
 
 if __name__ == "__main__":

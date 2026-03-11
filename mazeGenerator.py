@@ -20,6 +20,16 @@ class MazeGenerator:
         self.stack: List[Tuple[int, int]] = []
         self.visited: Set[Tuple[int, int]] = set()
         self.pattern_cells: Set[Tuple[int, int]] = set()
+    
+    def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
+        x, y = pos
+        if pos in self.pattern_cells or not (0 <= x < self.width and 0 <= y < self.height):
+            for y in range(self.height):
+                for x in range(self.width):
+                    if (x, y) not in self.pattern_cells:
+                        return (x, y)
+            raise RuntimeError("No valid positions available in the maze.")
+        return pos
 
     def _get_unvisited_neighbors(self, x: int,
                                  y: int) -> List[Tuple[int, int, str]]:
@@ -60,12 +70,9 @@ class MazeGenerator:
 
     def generate(self, start_pos: Tuple[int, int]) -> None:
         self.inject_42()
-        if start_pos in self.pattern_cells:
-            start_pos = next(
-                ((x, y) for y in range(self.height) for x in range(self.width)
-                 if (x, y) not in self.pattern_cells),
-                (0, 0)
-            )
+        start_pos = self.ensure_valid_position(start_pos)
+        if start_pos in self.visited:
+            start_pos = (0, 0)
         self.stack.append(start_pos)
         self.visited.add(start_pos)
         while self.stack:
@@ -73,7 +80,6 @@ class MazeGenerator:
             neighbors = self._get_unvisited_neighbors(current_x, current_y)
             if neighbors:
                 next_x, next_y, direction = random.choice(neighbors)
-                # Magic numbers below:
                 if direction == "N":
                     self.grid[current_y][current_x] -= 1
                     self.grid[next_y][next_x] -= 4
