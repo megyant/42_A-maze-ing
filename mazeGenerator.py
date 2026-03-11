@@ -20,10 +20,11 @@ class MazeGenerator:
         self.stack: List[Tuple[int, int]] = []
         self.visited: Set[Tuple[int, int]] = set()
         self.pattern_cells: Set[Tuple[int, int]] = set()
-    
+
     def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
         x, y = pos
-        if pos in self.pattern_cells or not (0 <= x < self.width and 0 <= y < self.height):
+        if pos in self.pattern_cells or not (0 <= x < self.width and
+                                             0 <= y < self.height):
             for y in range(self.height):
                 for x in range(self.width):
                     if (x, y) not in self.pattern_cells:
