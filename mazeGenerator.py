@@ -132,23 +132,47 @@ class MazeGenerator:
 
         return "".join(reversed(path_list))
 
-    def make_imperfect(self, chance: float = 0.1) -> None:
+    def make_imperfect(self, chance: float = 0.8) -> None:
+        walls_broken = 0
         for y in range(self.height):
             for x in range(self.width):
-                if (x, y) in self.visited:
+
+                if (x, y) in self.pattern_cells:
                     continue
+
                 if random.random() < chance:
                     wall = random.choice([2, 4])
+
                     if wall == 2 and x < self.width - 1:
-                        if (self.grid[y][x] & 2) and \
-                                (x + 1, y) not in self.visited:
-                            self.grid[y][x] &= ~2
-                            self.grid[y][x+1] &= ~8
+                        if (x + 1, y) not in self.pattern_cells:
+
+                            gap_up = (y > 0) and not (self.grid[y-1][x] & 2)
+                            gap_down = ((y < self.height - 1)
+                                        and not (self.grid[y+1][x] & 2))
+
+                            three_pattern = gap_up and gap_down
+
+                            if not three_pattern and (self.grid[y][x] & 2):
+                                self.grid[y][x] &= ~2
+                                self.grid[y][x+1] &= ~8
+
+                                walls_broken += 1
+
                     elif wall == 4 and y < self.height - 1:
-                        if (self.grid[y][x] & 4) and \
-                                (x, y + 1) not in self.visited:
-                            self.grid[y][x] &= ~4
-                            self.grid[y+1][x] &= ~1
+                        if (x, y + 1) not in self.pattern_cells:
+
+                            gap_up = (x > 0) and not (self.grid[y][x-1] & 4)
+                            gap_down = ((x < self.width - 1)
+                                        and not (self.grid[y][x+1] & 4))
+
+                            three_pattern = gap_up and gap_down
+
+                            if not three_pattern and (self.grid[y][x] & 2):
+                                self.grid[y][x] &= ~4
+                                self.grid[y+1][x] &= ~1
+
+                                walls_broken += 1
+        print(f"DEBUG: Successfully broke {walls_broken} walls.")
 
     def display(
             self, path_str: str = "",
@@ -235,13 +259,19 @@ class Maze(MazeGenerator):
         super().__init__(width, height, seed)
         self.wall_color = "white"
 
-    def build(self, start_pos: Tuple[int, int] = (0, 0)):
+    def build(self, start_pos: Tuple[int, int] = (0, 0),
+              perfect: bool = True):
         self. grid = [[15 for _ in range(self.width)]  # magic number 15
                       for _ in range(self.height)]
         self.visited = set()
         self.stack = []
 
         self.generate(start_pos=start_pos)
+
+        if not perfect:
+            print("DEBUG: Breaking walls for new maze...")
+            self.make_imperfect(chance=0.4)
+
         self.generated = True
 
 

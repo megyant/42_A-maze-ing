@@ -219,3 +219,23 @@ class Display_Maze(Maze):
 
     def render(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)):
         self.display(path_str=path_str, start_pos=start_pos)
+
+
+
+    def make_imperfect(self, chance: float = 0.1) -> None:
+        for y in range(self.height):
+            for x in range(self.width):
+                if (x, y) in self.visited:
+                    continue
+                if random.random() < chance:
+                    wall = random.choice([2, 4])
+                    if wall == 2 and x < self.width - 1:
+                        if (self.grid[y][x] & 2) and \
+                                (x + 1, y) not in self.visited:
+                            self.grid[y][x] &= ~2
+                            self.grid[y][x+1] &= ~8
+                    elif wall == 4 and y < self.height - 1:
+                        if (self.grid[y][x] & 4) and \
+                                (x, y + 1) not in self.visited:
+                            self.grid[y][x] &= ~4
+                            self.grid[y+1][x] &= ~1

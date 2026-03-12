@@ -1,5 +1,4 @@
 import sys
-import random
 from typing import Dict, Any, Tuple
 from mazeGenerator import Display_Maze
 
@@ -61,9 +60,10 @@ def user_input(maze: Display_Maze, path: str, config: str,
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
 
+    is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
     try:
-        lines = False
-        print("\033[2J\033[H", end="", flush=True)
+        prompt_lines = False
+        #  print("\033[2J\033[H", end="", flush=True)
         while True:
             prompt = ("Available options:\n"
                       " . m or --maze: generate a new maze\n"
@@ -78,15 +78,15 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 break
 
             elif command == 'm' or command == '--maze':
-                maze.build()
+                maze.build(perfect=is_perfect)
                 current_path = maze.find_path(start=start_pos, end=exit_point)
-                print("\033[2J\033[H", end="", flush=True)
-                maze.show_path = False
+                # print("\033[2J\033[H", end="", flush=True)
                 maze.render(end_pos=exit_point, start_pos=start_pos)
-                lines = False
+                maze.show_path = False
+                prompt_lines = False
 
             elif command == 'p' or command == '--path':
-                print("\033[2J\033[H", end="", flush=True)
+                # print("\033[2J\033[H", end="", flush=True)
                 if maze.show_path is False:
                     maze.render(path_str=current_path, start_pos=start_pos,
                                 end_pos=exit_point)
@@ -94,25 +94,25 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 elif maze.show_path is True:
                     maze.render(end_pos=exit_point, start_pos=start_pos)
                     maze.show_path = False
-                lines = False
+                prompt_lines = False
 
             elif command == 'c' or command == '--color':
                 maze.wall_color = "example"
-                print("\033[2J\033[H", end="", flush=True)
+                #  print("\033[2J\033[H", end="", flush=True)
                 maze.render()
                 print("Color changed")
-                lines = False
+                prompt_lines = False
 
             elif command == 'clear' or command == '--clear':
                 print("\033[2J\033[H", end="", flush=True)
-                lines = False
+                prompt_lines = False
 
             else:
-                if lines is True:
+                if prompt_lines is True:
                     print("\033[10A\r\033[J", end="")
-                elif lines is False:
+                elif prompt_lines is False:
                     print("\033[8A\r\033[J", end="")
-                    lines = True
+                    prompt_lines = True
                 print("\nInvalid command. Try again")
                 continue
 
@@ -130,19 +130,11 @@ def main() -> None:
         seed = int(config["SEED"]) if "SEED" in config else None
 
         is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
+        print(f"DEBUG: is_perfect is {is_perfect}")
 
-        if is_perfect:
-            entry = format_cords(config.get("ENTRY", "0,0"))
-            exit_point = format_cords(config.get("EXIT",
-                                                 f"{width - 1},{height - 1}"))
-        else:
-            entry = (random.randint(0, width - 1),
-                     random.randint(0, height - 1))
-            exit_point = (random.randint(0, width - 1),
-                          random.randint(0, height - 1))
-            while exit_point == entry:
-                exit_point = (random.randint(0, width - 1),
-                              random.randint(0, height - 1))
+        entry = format_cords(config.get("ENTRY", "0,0"))
+        exit_point = format_cords(config.get("EXIT",
+                                  f"{width - 1},{height - 1}"))
 
         gen = Display_Maze(width=width, height=height, seed=seed)
         entry = gen.ensure_valid_position(entry)
@@ -153,7 +145,8 @@ def main() -> None:
         exit_point = gen.ensure_valid_position(exit_point)
 
         if not is_perfect:
-            gen.make_imperfect(chance=0.1)
+            print("DEBUG: Attempting to break walls...")
+            gen.make_imperfect(chance=0.4)
         path_str = gen.find_path(entry, exit_point)
 
         user_input(gen, path_str, config, entry)
