@@ -255,12 +255,12 @@ class MazeGenerator:
 
 class Maze(MazeGenerator):
     def __init__(self, width: int, height: int,
-                 seed: Optional[int] = None) -> None:
+                 seed: Optional[int] = None, perfect: bool = True) -> None:
         super().__init__(width, height, seed)
         self.wall_color = "white"
+        self.perfect = perfect
 
-    def build(self, start_pos: Tuple[int, int] = (0, 0),
-              perfect: bool = True):
+    def build(self, start_pos: Tuple[int, int] = (0, 0)):
         self. grid = [[15 for _ in range(self.width)]  # magic number 15
                       for _ in range(self.height)]
         self.visited = set()
@@ -268,8 +268,7 @@ class Maze(MazeGenerator):
 
         self.generate(start_pos=start_pos)
 
-        if not perfect:
-            print("DEBUG: Breaking walls for new maze...")
+        if not self.perfect:
             self.make_imperfect(chance=0.4)
 
         self.generated = True

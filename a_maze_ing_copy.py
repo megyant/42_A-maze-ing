@@ -63,13 +63,14 @@ def user_input(maze: Display_Maze, path: str, config: str,
     is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
     try:
         prompt_lines = False
-        #  print("\033[2J\033[H", end="", flush=True)
+        print("\033[2J\033[H", end="", flush=True)
         while True:
             prompt = ("Available options:\n"
                       " . m or --maze: generate a new maze\n"
                       " . p or --path: show/hide shortest path available\n"
                       " . c or --color: change maze color\n"
                       " . clear or --clear: clear maze\n"
+                      " . per or --perfect: toggle perfection\n"
                       " . q or --quit: exit configuration mode\n"
                       " command: ")
             command = input(f"\n{prompt}").strip().lower()
@@ -80,13 +81,13 @@ def user_input(maze: Display_Maze, path: str, config: str,
             elif command == 'm' or command == '--maze':
                 maze.build(perfect=is_perfect)
                 current_path = maze.find_path(start=start_pos, end=exit_point)
-                # print("\033[2J\033[H", end="", flush=True)
+                print("\033[2J\033[H", end="", flush=True)
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
                 prompt_lines = False
 
             elif command == 'p' or command == '--path':
-                # print("\033[2J\033[H", end="", flush=True)
+                print("\033[2J\033[H", end="", flush=True)
                 if maze.show_path is False:
                     maze.render(path_str=current_path, start_pos=start_pos,
                                 end_pos=exit_point)
@@ -95,10 +96,16 @@ def user_input(maze: Display_Maze, path: str, config: str,
                     maze.render(end_pos=exit_point, start_pos=start_pos)
                     maze.show_path = False
                 prompt_lines = False
+            
+            elif command == 'per' or command == '--perfect':
+                if maze.perfect:
+                    maze.perfect = False
+                else:
+                    maze.perfect = True
 
             elif command == 'c' or command == '--color':
                 maze.wall_color = "example"
-                #  print("\033[2J\033[H", end="", flush=True)
+                print("\033[2J\033[H", end="", flush=True)
                 maze.render()
                 print("Color changed")
                 prompt_lines = False
