@@ -205,7 +205,7 @@ class Maze(MazeGeneratorcopy):
         self.visited = set()
         self.stack = []
 
-        self.generate((0, 0), perfect=self.perfect)
+        self.generate((0, 0))
         self.generated = True
 
 
@@ -214,7 +214,7 @@ class Display_Maze(Maze):
     def __init__(self, width: int, height: int,
                  seed: Optional[int] = None,
                  perfect: Optional[bool] = True) -> None:
-        super().__init__(width, height, seed, perfect)
+        super().__init__(width, height, seed)
         self.show_path = False
 
     def render(self, path_str: str = "", start_pos: Tuple[int, int] = (0, 0)):

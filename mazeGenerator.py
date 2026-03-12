@@ -162,7 +162,8 @@ class MazeGenerator:
         RESET = "\033[0m"
         path_coords = set()
         curr_x, curr_y = start_pos
-        path_coords.add((curr_x, curr_y))
+        if path_str:
+            path_coords.add((curr_x, curr_y))
         for d in path_str:
             if d == "N":
                 curr_y -= 1
@@ -182,10 +183,10 @@ class MazeGenerator:
             for x in range(self.width):
                 is_42 = (x, y) in self.pattern_cells
                 c = SPECIAL if is_42 else WHITE
-                if (x, y) == start_pos:
-                    content = f"{GREEN} ⦿ {RESET}"
-                elif end_pos and (x, y) == end_pos:
+                if end_pos and (x, y) == end_pos:
                     content = f"{RED} ⦿ {RESET}"
+                elif (x, y) == start_pos:
+                    content = f"{GREEN} ⦿ {RESET}"
                 elif (x, y) in path_coords:
                     content = f"{c} ● {RESET}"
                 else:
@@ -226,3 +227,32 @@ class MazeGenerator:
                     l2 += f"{WHITE}═══{char}{RESET}"
             print(l1)
             print(l2)
+
+
+class Maze(MazeGenerator):
+    def __init__(self, width: int, height: int,
+                 seed: Optional[int] = None) -> None:
+        super().__init__(width, height, seed)
+        self.wall_color = "white"
+
+    def build(self, start_pos: Tuple[int, int] = (0, 0)):
+        self. grid = [[15 for _ in range(self.width)]  # magic number 15
+                      for _ in range(self.height)]
+        self.visited = set()
+        self.stack = []
+
+        self.generate(start_pos=start_pos)
+        self.generated = True
+
+
+class Display_Maze(Maze):
+
+    def __init__(self, width: int, height: int,
+                 seed: Optional[int] = None) -> None:
+        super().__init__(width, height, seed)
+        self.show_path = False
+
+    def render(self, path_str: str = "",
+               start_pos: Tuple[int, int] = (0, 0),
+               end_pos: Tuple[int, int] | None = None):
+        self.display(path_str=path_str, start_pos=start_pos, end_pos=end_pos)
