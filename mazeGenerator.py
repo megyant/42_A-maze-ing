@@ -20,6 +20,11 @@ class MazeGenerator:
         self.stack: List[Tuple[int, int]] = []
         self.visited: Set[Tuple[int, int]] = set()
         self.pattern_cells: Set[Tuple[int, int]] = set()
+        self.color: Dict = {"MAIN": "\033[97m",
+                            "42": "\033[91m",
+                            "START": "\033[92m",
+                            "END": "\033[91m",
+                            "RESET": "\033[0m"}
 
     def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
         x, y = pos
@@ -176,14 +181,13 @@ class MazeGenerator:
 
     def display(
             self, path_str: str = "",
+            color: Dict | None = None,
             start_pos: Tuple[int, int] = (0, 0),
             end_pos: Tuple[int, int] | None = None
             ) -> None:
-        WHITE = "\033[97m"
-        SPECIAL = "\033[91m"
-        GREEN = "\033[92m"
-        RED = "\033[91m"
-        RESET = "\033[0m"
+
+        color = color if color is not None else self.color
+
         path_coords = set()
         curr_x, curr_y = start_pos
         if path_str:
@@ -198,41 +202,44 @@ class MazeGenerator:
             elif d == "W":
                 curr_x -= 1
             path_coords.add((curr_x, curr_y))
-        print(WHITE + "╔" + "═══╦" * (self.width - 1) + "═══╗" + RESET)
+        print(color.get("MAIN") + "╔" + "═══╦" * (self.width - 1) + "═══╗" +
+              color.get("RESET"))
         for y in range(self.height):
             l1, l2 = "", ""
-            border_c = SPECIAL if (0, y) in self.pattern_cells else WHITE
-            l1 += border_c + "║" + RESET
-            l2 += border_c + ("╠" if y < self.height - 1 else "╚") + RESET
+            border_c = (color.get("42") if (0, y) in self.pattern_cells
+                        else color.get("MAIN"))
+            l1 += border_c + "║" + color.get("RESET")
+            l2 += (border_c + ("╠" if y < self.height - 1 else "╚") +
+                   color.get("RESET"))
             for x in range(self.width):
                 is_42 = (x, y) in self.pattern_cells
-                c = SPECIAL if is_42 else WHITE
+                c = color.get("42") if is_42 else color.get("MAIN")
                 if end_pos and (x, y) == end_pos:
-                    content = f"{RED} ⦿ {RESET}"
+                    content = f"{color.get("START")} ⦿ {color.get("RESET")}"
                 elif (x, y) == start_pos:
-                    content = f"{GREEN} ⦿ {RESET}"
+                    content = f"{color.get("END")} ⦿ {color.get("RESET")}"
                 elif (x, y) in path_coords:
-                    content = f"{c} ● {RESET}"
+                    content = f"{c} ● {color.get("RESET")}"
                 else:
                     content = "   "
                 if self.grid[y][x] & 2:
                     is_east_neighbor_42 = x < self.width - 1 and \
                         (x + 1, y) in self.pattern_cells
                     wall_color = (
-                        SPECIAL if (is_42 or is_east_neighbor_42)
-                        else WHITE
+                        color.get("42") if (is_42 or is_east_neighbor_42)
+                        else color.get("MAIN")
                     )
-                    l1 += content + wall_color + "║" + RESET
+                    l1 += content + wall_color + "║" + color.get("RESET")
                 else:
                     l1 += content + " "
                 if y < self.height - 1:
                     is_south_neighbor_42 = (x, y + 1) in self.pattern_cells
                     wall_s_color = (
-                        SPECIAL if (is_42 or is_south_neighbor_42)
-                        else WHITE
+                        color.get("42") if (is_42 or is_south_neighbor_42)
+                        else color.get("MAIN")
                     )
                     south_wall = "═══" if self.grid[y][x] & 4 else "   "
-                    l2 += wall_s_color + south_wall + RESET
+                    l2 += wall_s_color + south_wall + color.get("RESET")
                     if x < self.width - 1:
                         is_corner_42 = any(
                             p in self.pattern_cells
@@ -242,13 +249,14 @@ class MazeGenerator:
                                       (x + 1, y + 1)]
                         )
                         l2 += (
-                            SPECIAL if is_corner_42
-                            else WHITE) + "╬" + RESET
+                            color.get("42") if is_corner_42
+                            else color.get("MAIN")) + "╬" + color.get("RESET")
                     else:
-                        l2 += (SPECIAL if is_42 else WHITE) + "╣" + RESET
+                        l2 += (color.get("42") if is_42 else
+                               color.get("MAIN")) + "╣" + color.get("RESET")
                 else:
                     char = "╩" if x < self.width - 1 else "╝"
-                    l2 += f"{WHITE}═══{char}{RESET}"
+                    l2 += f"{color.get("MAIN")}═══{char}{color.get("RESET")}"
             print(l1)
             print(l2)
 
@@ -277,11 +285,45 @@ class Maze(MazeGenerator):
 class Display_Maze(Maze):
 
     def __init__(self, width: int, height: int,
-                 seed: Optional[int] = None) -> None:
-        super().__init__(width, height, seed)
+                 seed: Optional[int] = None, perfect: bool = True) -> None:
+        super().__init__(width, height, seed, perfect)
         self.show_path = False
+        self.color_change = False
 
     def render(self, path_str: str = "",
                start_pos: Tuple[int, int] = (0, 0),
                end_pos: Tuple[int, int] | None = None):
-        self.display(path_str=path_str, start_pos=start_pos, end_pos=end_pos)
+
+        active_path = path_str if self.show_path else ""
+
+        active_colors = None
+        if self.color_change is True:
+            active_colors = {
+                "MAIN": "\033[95m",
+                "42": "\033[96m",
+                "START": "\033[94m",
+                "END": "\033[93m",
+                "RESET": "\033[0m"
+            }
+
+        self.display(path_str=active_path, color=active_colors,
+                     start_pos=start_pos, end_pos=end_pos)
+
+    def change_color(self, path_str: str = "",
+                     start_pos: Tuple[int, int] = (0, 0),
+                     end_pos: Tuple[int, int] | None = None) -> None:
+
+        color = {"MAIN": "\033[95m",
+                 "42": "\033[96m",
+                 "START": "\033[94m",
+                 "END": "\033[93m",
+                 "RESET": "\033[0m"}
+
+        if self.color_change is False:
+            self.display(path_str=path_str, start_pos=start_pos,
+                         end_pos=end_pos, color=color)
+            self.color_change = True
+        else:
+            self.render(path_str=path_str, start_pos=start_pos,
+                        end_pos=end_pos)
+            self.color_change = False

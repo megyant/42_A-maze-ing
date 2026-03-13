@@ -60,7 +60,6 @@ def user_input(maze: Display_Maze, path: str, config: str,
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
 
-    is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
     try:
         prompt_lines = False
         print("\033[2J\033[H", end="", flush=True)
@@ -79,7 +78,7 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 break
 
             elif command == 'm' or command == '--maze':
-                maze.build(perfect=is_perfect)
+                maze.build()
                 current_path = maze.find_path(start=start_pos, end=exit_point)
                 print("\033[2J\033[H", end="", flush=True)
                 maze.render(end_pos=exit_point, start_pos=start_pos)
@@ -88,26 +87,27 @@ def user_input(maze: Display_Maze, path: str, config: str,
 
             elif command == 'p' or command == '--path':
                 print("\033[2J\033[H", end="", flush=True)
-                if maze.show_path is False:
-                    maze.render(path_str=current_path, start_pos=start_pos,
-                                end_pos=exit_point)
-                    maze.show_path = True
-                elif maze.show_path is True:
-                    maze.render(end_pos=exit_point, start_pos=start_pos)
-                    maze.show_path = False
                 prompt_lines = False
-            
+                maze.show_path = not maze.show_path
+                maze.render(path_str=current_path, end_pos=exit_point,
+                            start_pos=start_pos)
+                prompt_lines = False
+
             elif command == 'per' or command == '--perfect':
+                print("\033[2J\033[H", end="", flush=True)
+                print(f"Please create a new maze. Perfect = {maze.perfect}")
                 if maze.perfect:
                     maze.perfect = False
                 else:
                     maze.perfect = True
 
             elif command == 'c' or command == '--color':
-                maze.wall_color = "example"
                 print("\033[2J\033[H", end="", flush=True)
-                maze.render()
-                print("Color changed")
+                maze.color_change = not maze.color_change
+
+                maze.render(path_str=current_path,
+                            start_pos=start_pos,
+                            end_pos=exit_point)
                 prompt_lines = False
 
             elif command == 'clear' or command == '--clear':
@@ -116,9 +116,9 @@ def user_input(maze: Display_Maze, path: str, config: str,
 
             else:
                 if prompt_lines is True:
-                    print("\033[10A\r\033[J", end="")
+                    print("\033[11A\r\033[J", end="")
                 elif prompt_lines is False:
-                    print("\033[8A\r\033[J", end="")
+                    print("\033[9A\r\033[J", end="")
                     prompt_lines = True
                 print("\nInvalid command. Try again")
                 continue
@@ -143,7 +143,10 @@ def main() -> None:
         exit_point = format_cords(config.get("EXIT",
                                   f"{width - 1},{height - 1}"))
 
-        gen = Display_Maze(width=width, height=height, seed=seed)
+        is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
+
+        gen = Display_Maze(width=width, height=height, seed=seed,
+                           perfect=is_perfect)
         entry = gen.ensure_valid_position(entry)
         exit_point = gen.ensure_valid_position(exit_point)
 
