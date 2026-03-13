@@ -137,7 +137,6 @@ def main() -> None:
         seed = int(config["SEED"]) if "SEED" in config else None
 
         is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
-        print(f"DEBUG: is_perfect is {is_perfect}")
 
         entry = format_cords(config.get("ENTRY", "0,0"))
         exit_point = format_cords(config.get("EXIT",
@@ -155,7 +154,6 @@ def main() -> None:
         exit_point = gen.ensure_valid_position(exit_point)
 
         if not is_perfect:
-            print("DEBUG: Attempting to break walls...")
             gen.make_imperfect(chance=0.4)
         path_str = gen.find_path(entry, exit_point)
 

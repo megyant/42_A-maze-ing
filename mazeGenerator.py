@@ -177,7 +177,6 @@ class MazeGenerator:
                                 self.grid[y+1][x] &= ~1
 
                                 walls_broken += 1
-        print(f"DEBUG: Successfully broke {walls_broken} walls.")
 
     def display(
             self, path_str: str = "",
