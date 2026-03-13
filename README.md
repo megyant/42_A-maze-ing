@@ -145,7 +145,6 @@ Access grid:
 maze.grid
 ```
 // Any others?  
-// BTW is perfect maze working? Its not tried but couldnt fix it  
 
 ## Resources
 - [Jamisbuck's blog](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)  
@@ -176,7 +175,7 @@ Our project was built on a foundation of clear communication and specialized rol
 | **Team Member**           | **Primary Focus and Contributions** 
 | ----                      | ----   
 | **Denisa (dtalapan)**     | Core Engineering: Developed the maze generation logic, input parsing systems, and pathfinding algorithms.  
-| **Margarida (mbotelho)**  | UX & Infrastructure: Designed the user interface, managed the project lifecycle (Makefile/README), and oversaw task delegation.  
+| **Margarida (mbotelho)**  | UX & Infrastructure: Designed the user interface, managed the project lifecycle (Makefile/README), and problem solving.  
 
 ### Development Workflow
 
