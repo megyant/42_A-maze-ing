@@ -164,8 +164,6 @@ def main() -> None:
 
         user_input(gen, path_str, config, entry)
 
-        print(gen.valid_position)
-
     except (Exception, ValueError) as e:
         print(f"Error occurred: {e}")
         #  import traceback
