@@ -26,11 +26,13 @@ class MazeGenerator:
                             "END": "\033[91m",
                             "RESET": "\033[0m"}
         self.injected = True
+        self.valid_position = True
 
     def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
         x, y = pos
         if pos in self.pattern_cells or not (0 <= x < self.width and
                                              0 <= y < self.height):
+            self.valid_position = False
             for y in range(self.height):
                 for x in range(self.width):
                     if (x, y) not in self.pattern_cells:

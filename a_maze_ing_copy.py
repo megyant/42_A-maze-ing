@@ -84,6 +84,8 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 if maze.injected is False:
                     print("Error: Maze size too small to display full '42'"
                           "pattern")
+                if maze.valid_position is False:
+                    print("Error: Not a Valid position.")
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
                 prompt_lines = False
@@ -162,10 +164,12 @@ def main() -> None:
 
         user_input(gen, path_str, config, entry)
 
-    except Exception as e:
+        print(gen.valid_position)
+
+    except (Exception, ValueError) as e:
         print(f"Error occurred: {e}")
-        import traceback
-        traceback.print_exc()
+        #  import traceback
+        #  traceback.print_exc()
         sys.exit(1)
 
 
