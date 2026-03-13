@@ -25,6 +25,7 @@ class MazeGenerator:
                             "START": "\033[92m",
                             "END": "\033[91m",
                             "RESET": "\033[0m"}
+        self.injected = True
 
     def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
         x, y = pos
@@ -53,6 +54,7 @@ class MazeGenerator:
     def inject_42(self) -> None:
         # 7x5 area for 42
         # 4 is 3x5
+        self.injected = True
         pattern_4 = [(0, 0), (0, 1), (0, 2),
                      (1, 2), (2, 0), (2, 1),
                      (2, 2), (2, 3), (2, 4)]
@@ -75,7 +77,11 @@ class MazeGenerator:
             self.pattern_cells.add((target_x, target_y))
 
     def generate(self, start_pos: Tuple[int, int]) -> None:
-        self.inject_42()
+        try:
+            self.inject_42()
+        except ValueError:
+            self.injected = False
+            print("Error: Maze size too small to display full '42'pattern")
         start_pos = self.ensure_valid_position(start_pos)
         if start_pos in self.visited:
             start_pos = (0, 0)

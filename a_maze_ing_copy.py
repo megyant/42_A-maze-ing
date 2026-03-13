@@ -81,6 +81,9 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 maze.build()
                 current_path = maze.find_path(start=start_pos, end=exit_point)
                 print("\033[2J\033[H", end="", flush=True)
+                if maze.injected is False:
+                    print("Error: Maze size too small to display full '42'"
+                          "pattern")
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
                 prompt_lines = False
