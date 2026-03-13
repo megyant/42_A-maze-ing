@@ -1,5 +1,5 @@
-from mazeGenerator_copy import Display_Maze
-from a_maze_ing import parse_config, format_cords
+from To_delete.mazeGenerator_copy import Display_Maze
+from To_delete.a_maze_ing import parse_config, format_cords
 from typing import Tuple
 
 
