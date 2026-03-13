@@ -85,7 +85,7 @@ def user_input(maze: Display_Maze, path: str, config: str,
                     print("Error: Maze size too small to display full '42'"
                           "pattern")
                 if maze.valid_position is False:
-                    print("Error: Not a Valid position.")
+                    print("Error: Not a valid position.")
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
                 prompt_lines = False
