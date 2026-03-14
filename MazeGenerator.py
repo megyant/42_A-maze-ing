@@ -282,7 +282,7 @@ class MazeGenerator:
         # return string in reverse order to have correct path list
         return "".join(reversed(path_list))
 
-    def make_imperfect(self, chance: float = 0.8) -> None:
+    def make_imperfect(self, chance: float = 0.4) -> None:
         """
         Convert perfect maze into imperfect by removing random walls.
 
