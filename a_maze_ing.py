@@ -3,7 +3,7 @@ from typing import Dict, Any, Tuple
 from mazeGenerator import Display_Maze
 
 
-def check_mandatory_keys(config: Dict[str, Any]) -> None:
+def check_mandatory_keys(config: Dict[str, str]) -> None:
     try:
         mandatory = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE",
                      "PERFECT"]
@@ -53,9 +53,8 @@ def format_cords(coord_Str: str) -> Tuple[int, int]:
         sys.exit(1)
 
 
-def user_input(maze: Display_Maze, path: str, config: str,
+def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                start_pos: Tuple[int, int]) -> None:
-
     width = int(config.get("WIDTH", 10))
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
@@ -73,10 +72,8 @@ def user_input(maze: Display_Maze, path: str, config: str,
                       " . q or --quit: exit configuration mode\n"
                       " command: ")
             command = input(f"\n{prompt}").strip().lower()
-
             if command == 'q' or command == '--quit':
                 break
-
             elif command == 'm' or command == '--maze':
                 maze.build()
                 current_path = maze.find_path(start=start_pos, end=exit_point)
@@ -89,7 +86,6 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
                 prompt_lines = False
-
             elif command == 'p' or command == '--path':
                 print("\033[2J\033[H", end="", flush=True)
                 prompt_lines = False
@@ -97,7 +93,6 @@ def user_input(maze: Display_Maze, path: str, config: str,
                 maze.render(path_str=current_path, end_pos=exit_point,
                             start_pos=start_pos)
                 prompt_lines = False
-
             elif command == 'per' or command == '--perfect':
                 print("\033[2J\033[H", end="", flush=True)
                 print(f"Please create a new maze. Perfect = {maze.perfect}")
@@ -105,20 +100,16 @@ def user_input(maze: Display_Maze, path: str, config: str,
                     maze.perfect = False
                 else:
                     maze.perfect = True
-
             elif command == 'c' or command == '--color':
                 print("\033[2J\033[H", end="", flush=True)
                 maze.color_change = not maze.color_change
-
                 maze.render(path_str=current_path,
                             start_pos=start_pos,
                             end_pos=exit_point)
                 prompt_lines = False
-
             elif command == 'clear' or command == '--clear':
                 print("\033[2J\033[H", end="", flush=True)
                 prompt_lines = False
-
             else:
                 if prompt_lines is True:
                     print("\033[11A\r\033[J", end="")
@@ -127,7 +118,6 @@ def user_input(maze: Display_Maze, path: str, config: str,
                     prompt_lines = True
                 print("\nInvalid command. Try again")
                 continue
-
     except Exception as e:
         print(f"oops something went wrong: {e}")
 
@@ -137,33 +127,27 @@ def main() -> None:
         config = parse_config("config.txt")
         width = int(config.get("WIDTH", 10))
         height = int(config.get("HEIGHT", 10))
-
         config.get("OUTPUT_FILE", "output_maze.txt")
         seed = int(config["SEED"]) if "SEED" in config else None
-
         is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
-
         entry = format_cords(config.get("ENTRY", "0,0"))
         exit_point = format_cords(config.get("EXIT",
                                   f"{width - 1},{height - 1}"))
-
         is_perfect = config.get("PERFECT", "TRUE").upper() == "TRUE"
-
+        if entry == exit_point:
+            print("Error: Entry point and Exit point cannot be the same.")
+            sys.exit(1)
         gen = Display_Maze(width=width, height=height, seed=seed,
                            perfect=is_perfect)
         entry = gen.ensure_valid_position(entry)
         exit_point = gen.ensure_valid_position(exit_point)
-
         gen.generate(entry)
         entry = gen.ensure_valid_position(entry)
         exit_point = gen.ensure_valid_position(exit_point)
-
         if not is_perfect:
             gen.make_imperfect(chance=0.4)
         path_str = gen.find_path(entry, exit_point)
-
         user_input(gen, path_str, config, entry)
-
     except (Exception, ValueError) as e:
         print(f"Error occurred: {e}")
         #  import traceback

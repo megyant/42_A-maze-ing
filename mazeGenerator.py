@@ -20,7 +20,8 @@ class MazeGenerator:
         self.stack: List[Tuple[int, int]] = []
         self.visited: Set[Tuple[int, int]] = set()
         self.pattern_cells: Set[Tuple[int, int]] = set()
-        self.color: Dict = {"MAIN": "\033[97m",
+        self.color: Dict[str, str] = {
+                            "MAIN": "\033[97m",
                             "42": "\033[91m",
                             "START": "\033[92m",
                             "END": "\033[91m",
@@ -142,59 +143,44 @@ class MazeGenerator:
                 current = current_node
             else:
                 break
-
         return "".join(reversed(path_list))
 
     def make_imperfect(self, chance: float = 0.8) -> None:
         walls_broken = 0
         for y in range(self.height):
             for x in range(self.width):
-
                 if (x, y) in self.pattern_cells:
                     continue
-
                 if random.random() < chance:
                     wall = random.choice([2, 4])
-
                     if wall == 2 and x < self.width - 1:
                         if (x + 1, y) not in self.pattern_cells:
-
                             gap_up = (y > 0) and not (self.grid[y-1][x] & 2)
                             gap_down = ((y < self.height - 1)
                                         and not (self.grid[y+1][x] & 2))
-
                             three_pattern = gap_up and gap_down
-
                             if not three_pattern and (self.grid[y][x] & 2):
                                 self.grid[y][x] &= ~2
                                 self.grid[y][x+1] &= ~8
-
                                 walls_broken += 1
-
                     elif wall == 4 and y < self.height - 1:
                         if (x, y + 1) not in self.pattern_cells:
-
                             gap_up = (x > 0) and not (self.grid[y][x-1] & 4)
                             gap_down = ((x < self.width - 1)
                                         and not (self.grid[y][x+1] & 4))
-
                             three_pattern = gap_up and gap_down
-
                             if not three_pattern and (self.grid[y][x] & 2):
                                 self.grid[y][x] &= ~4
                                 self.grid[y+1][x] &= ~1
-
                                 walls_broken += 1
 
     def display(
             self, path_str: str = "",
-            color: Dict | None = None,
+            color: Dict[str, str] | None = None,
             start_pos: Tuple[int, int] = (0, 0),
             end_pos: Tuple[int, int] | None = None
             ) -> None:
-
         color = color if color is not None else self.color
-
         path_coords = set()
         curr_x, curr_y = start_pos
         if path_str:
@@ -209,15 +195,22 @@ class MazeGenerator:
             elif d == "W":
                 curr_x -= 1
             path_coords.add((curr_x, curr_y))
-        print(color.get("MAIN") + "╔" + "═══╦" * (self.width - 1) + "═══╗" +
-              color.get("RESET"))
+        print(
+            color.get("MAIN", "") +
+            "╔" + ("═══╦" * (self.width - 1)) + "═══╗" +
+            color.get("RESET", "")
+        )
         for y in range(self.height):
             l1, l2 = "", ""
             border_c = (color.get("42") if (0, y) in self.pattern_cells
                         else color.get("MAIN"))
-            l1 += border_c + "║" + color.get("RESET")
-            l2 += (border_c + ("╠" if y < self.height - 1 else "╚") +
-                   color.get("RESET"))
+            l1 += f"{border_c}║{color.get('RESET', '')}"
+            joint = "╠" if y < self.height - 1 else "╚"
+            l2 += (
+                f"{border_c or ''}"
+                f"{joint}"
+                f"{color.get('RESET', '')}"
+            )
             for x in range(self.width):
                 is_42 = (x, y) in self.pattern_cells
                 c = color.get("42") if is_42 else color.get("MAIN")
@@ -236,7 +229,9 @@ class MazeGenerator:
                         color.get("42") if (is_42 or is_east_neighbor_42)
                         else color.get("MAIN")
                     )
-                    l1 += content + wall_color + "║" + color.get("RESET")
+                    reset = color.get("RESET", "")
+                    wall = wall_color or ""
+                    l1 += f"{content}{wall}║{reset}"
                 else:
                     l1 += content + " "
                 if y < self.height - 1:
@@ -246,7 +241,9 @@ class MazeGenerator:
                         else color.get("MAIN")
                     )
                     south_wall = "═══" if self.grid[y][x] & 4 else "   "
-                    l2 += wall_s_color + south_wall + color.get("RESET")
+                    w_color = wall_s_color or ""
+                    reset = color.get("RESET", "")
+                    l2 += f"{w_color}{south_wall}{reset}"
                     if x < self.width - 1:
                         is_corner_42 = any(
                             p in self.pattern_cells
@@ -256,11 +253,14 @@ class MazeGenerator:
                                       (x + 1, y + 1)]
                         )
                         l2 += (
-                            color.get("42") if is_corner_42
-                            else color.get("MAIN")) + "╬" + color.get("RESET")
+                            color.get("42", "") if is_corner_42
+                            else color.get("MAIN", "")
+                        ) + "╬" + color.get("RESET", "")
                     else:
-                        l2 += (color.get("42") if is_42 else
-                               color.get("MAIN")) + "╣" + color.get("RESET")
+                        l2 += (
+                            color.get("42", "") if is_42
+                            else color.get("MAIN", "")
+                        ) + "╣" + color.get("RESET", "")
                 else:
                     char = "╩" if x < self.width - 1 else "╝"
                     l2 += f"{color.get("MAIN")}═══{char}{color.get("RESET")}"
@@ -275,17 +275,14 @@ class Maze(MazeGenerator):
         self.wall_color = "white"
         self.perfect = perfect
 
-    def build(self, start_pos: Tuple[int, int] = (0, 0)):
+    def build(self, start_pos: Tuple[int, int] = (0, 0)) -> None:
         self. grid = [[15 for _ in range(self.width)]  # magic number 15
                       for _ in range(self.height)]
         self.visited = set()
         self.stack = []
-
         self.generate(start_pos=start_pos)
-
         if not self.perfect:
             self.make_imperfect(chance=0.4)
-
         self.generated = True
 
 
@@ -297,12 +294,13 @@ class Display_Maze(Maze):
         self.show_path = False
         self.color_change = False
 
-    def render(self, path_str: str = "",
-               start_pos: Tuple[int, int] = (0, 0),
-               end_pos: Tuple[int, int] | None = None):
-
+    def render(
+        self,
+        path_str: str = "",
+        start_pos: Tuple[int, int] = (0, 0),
+        end_pos: Optional[Tuple[int, int]] = None  # Use built-in Optional
+    ) -> None:
         active_path = path_str if self.show_path else ""
-
         active_colors = None
         if self.color_change is True:
             active_colors = {
@@ -312,20 +310,17 @@ class Display_Maze(Maze):
                 "END": "\033[93m",
                 "RESET": "\033[0m"
             }
-
         self.display(path_str=active_path, color=active_colors,
                      start_pos=start_pos, end_pos=end_pos)
 
     def change_color(self, path_str: str = "",
                      start_pos: Tuple[int, int] = (0, 0),
                      end_pos: Tuple[int, int] | None = None) -> None:
-
         color = {"MAIN": "\033[95m",
                  "42": "\033[96m",
                  "START": "\033[94m",
                  "END": "\033[93m",
                  "RESET": "\033[0m"}
-
         if self.color_change is False:
             self.display(path_str=path_str, start_pos=start_pos,
                          end_pos=end_pos, color=color)
