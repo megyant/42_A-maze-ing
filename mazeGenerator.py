@@ -4,108 +4,180 @@ from collections import deque
 
 
 class MazeGenerator:
+    """ Provide tools to generate a maze using recursive backtracker algorithm. """
     def __init__(
             self,
             width: int,
             height: int,
             seed: Optional[int] = None
     ) -> None:
+        """ 
+        Initialize the maze generator class.
+         
+        Args:
+            width: Number of cells horizontally. 
+            height: Number of cells vertically.
+            seed: An optional integer to seed the random number generator.
+        """
+        full_grid = 15  # sum of bits representing each wall
+
         self.width: int = width
         self.height: int = height
+
         self.grid: List[List[int]] = [
-            [15 for _ in range(width)]  # magic number 15
-            for _ in range(height)]
-        if seed is not None:
+            [full_grid for _ in range(width)]
+            for _ in range(height)]  # initializing grid
+
+        if seed is not None:  # if no seed, then randomly select one
             random.seed(seed)
-        self.stack: List[Tuple[int, int]] = []
-        self.visited: Set[Tuple[int, int]] = set()
-        self.pattern_cells: Set[Tuple[int, int]] = set()
-        self.color: Dict[str, str] = {
-                            "MAIN": "\033[97m",
-                            "42": "\033[91m",
-                            "START": "\033[92m",
-                            "END": "\033[91m",
-                            "RESET": "\033[0m"}
-        self.injected = True
-        self.valid_position = True
+
+        self.stack: List[Tuple[int, int]] = []  # cell being worked on
+        self.visited: Set[Tuple[int, int]] = set()  # set of cells that have been worked on
+        self.pattern_cells: Set[Tuple[int, int]] = set()  # cells belonging to 42 pattern
+
+        self.color: Dict[str, str] = {  # default maze colors
+                            "MAIN": "\033[97m",  # Maze walls - white
+                            "42": "\033[91m",    # 42 pattern - red
+                            "START": "\033[92m", # Start dot - green
+                            "END": "\033[91m",   # End dot - red
+                            "RESET": "\033[0m"}  # Default - default terminal color
+
+        self.injected = True  # has 42 pattern been inject
+        self.valid_position = True  # is the position valid (e.g. outsice of boundaries)
 
     def ensure_valid_position(self, pos: Tuple[int, int]) -> Tuple[int, int]:
-        x, y = pos
+        """ 
+        Check if a position is valid and return an alternative if not.
+
+        A position is invalid if it lies outside of grid boundaries or
+        whitin a reserved pattern (e.g. 42 pattern).
+
+        Args:
+            pos: A tuple representing coordinates (x, y) to check.
+        
+        Returns:
+            The original position if valid or the first available valid cell.
+        """
+        x, y = pos  # unpacking the Tuple in the two points of a coordinate
         if pos in self.pattern_cells or not (0 <= x < self.width and
-                                             0 <= y < self.height):
-            self.valid_position = False
+                                             0 <= y < self.height):  # if in 42 pattern or outside maze boundaries
+            self.valid_position = False  # set valid position as false
             for y in range(self.height):
                 for x in range(self.width):
-                    if (x, y) not in self.pattern_cells:
+                    if (x, y) not in self.pattern_cells:  # find next available point
                         return (x, y)
-            raise RuntimeError("No valid positions available in the maze.")
+            raise RuntimeError("No valid positions available in the maze.")  # if not available raise error
         return pos
 
     def _get_unvisited_neighbors(self, x: int,
                                  y: int) -> List[Tuple[int, int, str]]:
-        neighbors: List[Tuple[int, int, str]] = []
+        """ 
+        Identify adjacent cells that have not yet been visited.
+         
+        Args:
+            x: the x-coordinate.
+            y: the y-coordinate
+        
+        Returns:
+            A list of tuples containing(neighbor x, neighbor y, direction.
+        """
+        neighbors: List[Tuple[int, int, str]] = []   # create neigbors list
+
         if y > 0 and (x, y - 1) not in self.visited:
-            neighbors.append((x, y - 1, "N"))
+            neighbors.append((x, y - 1, "N"))        # append north cell
+
         if y < self.height - 1 and (x, y + 1) not in self.visited:
-            neighbors.append((x, y + 1, "S"))
+            neighbors.append((x, y + 1, "S"))        # append south cell
+
         if x > 0 and (x - 1, y) not in self.visited:
-            neighbors.append((x - 1, y, "W"))
+            neighbors.append((x - 1, y, "W"))        # append west cell
+
         if x < self.width - 1 and (x + 1, y) not in self.visited:
-            neighbors.append((x + 1, y, "E"))
+            neighbors.append((x + 1, y, "E"))        # append east cell
+
         return neighbors
 
     def inject_42(self) -> None:
+        """
+        Carve a 42 patern into the center of the maze.
+        
+        Reseves specific cells and prevents them from being a part of the maze-generation
+        process.
+        """
         # 7x5 area for 42
         # 4 is 3x5
+
+        ft_width = 7   # 42 width
+        ft_height = 5  # 42 height
+        full_grid = 15  # sum of bits representing each wall
+
         self.injected = True
+
         pattern_4 = [(0, 0), (0, 1), (0, 2),
                      (1, 2), (2, 0), (2, 1),
-                     (2, 2), (2, 3), (2, 4)]
+                     (2, 2), (2, 3), (2, 4)]  # 4 form
 
         pattern_2 = [(4, 0), (5, 0), (6, 0),
                      (6, 1), (6, 2), (5, 2),
                      (4, 2), (4, 3), (4, 4),
-                     (5, 4), (6, 4)]
-        all_42 = pattern_4 + pattern_2
+                     (5, 4), (6, 4)]          # 2 form
+
+        all_42 = pattern_4 + pattern_2        # 42 form
+
         if self.width < 10 or self.height < 7:
             raise ValueError("Error: Maze size too small to display full '42'"
-                             "pattern")  # ValueError instead of just print
-        start_x = (self.width - 7) // 2  # Magic Number 7
-        start_y = (self.height - 5) // 2  # Magic number 5
-        for dx, dy in all_42:
-            target_x = start_x + dx  # Name dx and dy could be more clear
-            target_y = start_y + dy
-            self.grid[target_y][target_x] = 15  # Magic Number 15
-            self.visited.add((target_x, target_y))
-            self.pattern_cells.add((target_x, target_y))
+                             "pattern")  # check if maze is bigger than 42
+
+        start_x = (self.width - ft_width) // 2    # Cells available after 42 injection
+        start_y = (self.height - ft_height) // 2  # Cells available after 42 injection
+
+        for offset_x, offset_y in all_42:
+            target_x = start_x + offset_x  # absolute horizontal position
+            target_y = start_y + offset_y  # absolute vertical position
+
+            self.grid[target_y][target_x] = full_grid     # reset cell to full wall
+            self.visited.add((target_x, target_y))        # mark cell as visited
+            self.pattern_cells.add((target_x, target_y))  # add cell to pattern cells list
 
     def generate(self, start_pos: Tuple[int, int]) -> None:
-        try:
+        """ 
+        Carve the  maze paths using a recursive backtracker agorithm.
+
+        Args:
+            start_pos: The (x, y) coordinates where the generation starts.
+        """
+        try:  # Attempts to inject 42 pattern, if not possible retuns a error message
             self.inject_42()
         except ValueError:
-            self.injected = False
+            self.injected = False  # toggle injected to false
             print("Error: Maze size too small to display full '42'pattern")
-        start_pos = self.ensure_valid_position(start_pos)
-        if start_pos in self.visited:
+
+        start_pos = self.ensure_valid_position(start_pos)  # ensure start is in a valid position
+
+        if start_pos in self.visited:  # if position in visited, then default is (0, 0)
             start_pos = (0, 0)
-        self.stack.append(start_pos)
-        self.visited.add(start_pos)
+
+        self.stack.append(start_pos)  # add position to stack
+        self.visited.add(start_pos)   # add position to visited
+
         while self.stack:
-            current_x, current_y = self.stack[-1]
-            neighbors = self._get_unvisited_neighbors(current_x, current_y)
+            current_x, current_y = self.stack[-1]  # get current location
+            neighbors = self._get_unvisited_neighbors(current_x, current_y)  # get unvisited cells
+
             if neighbors:
-                next_x, next_y, direction = random.choice(neighbors)
+                next_x, next_y, direction = random.choice(neighbors)  # select one valid neighbor
                 if direction == "N":
-                    self.grid[current_y][current_x] -= 1
-                    self.grid[next_y][next_x] -= 4
+                    self.grid[current_y][current_x] -= 1  # Remove north wall
+                    self.grid[next_y][next_x] -= 4        # Remove neighbor south wall
+
                 elif direction == "S":
-                    self.grid[current_y][current_x] -= 4
+                    self.grid[current_y][current_x] -= 4  # Remove south wall
                     self.grid[next_y][next_x] -= 1
                 elif direction == "E":
-                    self.grid[current_y][current_x] -= 2
+                    self.grid[current_y][current_x] -= 2  # Remove east wall
                     self.grid[next_y][next_x] -= 8
                 elif direction == "W":
-                    self.grid[current_y][current_x] -= 8
+                    self.grid[current_y][current_x] -= 8  # Remove west wall
                     self.grid[next_y][next_x] -= 2
                 self.visited.add((next_x, next_y))
                 self.stack.append((next_x, next_y))
@@ -113,6 +185,7 @@ class MazeGenerator:
                 self.stack.pop()
 
     def find_path(self, start: Tuple[int, int], end: Tuple[int, int]) -> str:
+        """  """
         queue = deque([start])
         parent: Dict[Tuple[int, int], Any] = {}
         parent[start] = None
@@ -146,6 +219,7 @@ class MazeGenerator:
         return "".join(reversed(path_list))
 
     def make_imperfect(self, chance: float = 0.8) -> None:
+        """  """
         walls_broken = 0
         for y in range(self.height):
             for x in range(self.width):
@@ -180,6 +254,7 @@ class MazeGenerator:
             start_pos: Tuple[int, int] = (0, 0),
             end_pos: Tuple[int, int] | None = None
             ) -> None:
+        """  """
         color = color if color is not None else self.color
         path_coords = set()
         curr_x, curr_y = start_pos
@@ -269,13 +344,16 @@ class MazeGenerator:
 
 
 class Maze(MazeGenerator):
+    """  """
     def __init__(self, width: int, height: int,
                  seed: Optional[int] = None, perfect: bool = True) -> None:
+        """  """
         super().__init__(width, height, seed)
         self.wall_color = "white"
         self.perfect = perfect
 
     def build(self, start_pos: Tuple[int, int] = (0, 0)) -> None:
+        """  """
         self. grid = [[15 for _ in range(self.width)]  # magic number 15
                       for _ in range(self.height)]
         self.visited = set()
@@ -287,9 +365,10 @@ class Maze(MazeGenerator):
 
 
 class Display_Maze(Maze):
-
+    """  """
     def __init__(self, width: int, height: int,
                  seed: Optional[int] = None, perfect: bool = True) -> None:
+        """  """
         super().__init__(width, height, seed, perfect)
         self.show_path = False
         self.color_change = False
@@ -300,6 +379,7 @@ class Display_Maze(Maze):
         start_pos: Tuple[int, int] = (0, 0),
         end_pos: Optional[Tuple[int, int]] = None  # Use built-in Optional
     ) -> None:
+        """  """
         active_path = path_str if self.show_path else ""
         active_colors = None
         if self.color_change is True:
@@ -312,20 +392,3 @@ class Display_Maze(Maze):
             }
         self.display(path_str=active_path, color=active_colors,
                      start_pos=start_pos, end_pos=end_pos)
-
-    def change_color(self, path_str: str = "",
-                     start_pos: Tuple[int, int] = (0, 0),
-                     end_pos: Tuple[int, int] | None = None) -> None:
-        color = {"MAIN": "\033[95m",
-                 "42": "\033[96m",
-                 "START": "\033[94m",
-                 "END": "\033[93m",
-                 "RESET": "\033[0m"}
-        if self.color_change is False:
-            self.display(path_str=path_str, start_pos=start_pos,
-                         end_pos=end_pos, color=color)
-            self.color_change = True
-        else:
-            self.render(path_str=path_str, start_pos=start_pos,
-                        end_pos=end_pos)
-            self.color_change = False

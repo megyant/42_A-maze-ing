@@ -4,6 +4,7 @@ from mazeGenerator import Display_Maze
 
 
 def check_mandatory_keys(config: Dict[str, str]) -> None:
+    """  """
     try:
         mandatory = ["WIDTH", "HEIGHT", "ENTRY", "EXIT", "OUTPUT_FILE",
                      "PERFECT"]
@@ -17,6 +18,7 @@ def check_mandatory_keys(config: Dict[str, str]) -> None:
 
 
 def parse_config(file_path: str) -> Dict[str, Any]:
+    """  """
     config: Dict[str, Any] = {}
     try:
         with open(file_path, 'r') as f:
@@ -45,6 +47,7 @@ def parse_config(file_path: str) -> Dict[str, Any]:
 
 
 def format_cords(coord_Str: str) -> Tuple[int, int]:
+    """  """
     try:
         x, y = map(int, coord_Str.split(','))
         return (x, y)
@@ -55,6 +58,7 @@ def format_cords(coord_Str: str) -> Tuple[int, int]:
 
 def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                start_pos: Tuple[int, int]) -> None:
+    """  """
     width = int(config.get("WIDTH", 10))
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
@@ -123,6 +127,7 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
 
 
 def main() -> None:
+    """  """
     try:
         config = parse_config("config.txt")
         width = int(config.get("WIDTH", 10))
