@@ -1,7 +1,7 @@
 import sys
 import random
 from typing import Dict, Any, Tuple
-from mazeGenerator import MazeGenerator
+from MazeGenerator import MazeGenerator
 
 
 def check_mandatory_keys(config: Dict[str, Any]) -> None:
