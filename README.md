@@ -102,6 +102,7 @@ There are some available options to interact with the maze:
 - m or --maze: generate a new maze
 - p or --path: show/hide shortest path available
 - c or --color: change maze color
+- per or --perfect: toggle perfection
 - clear or --clear: clear maze
 - q or --quit: exit configuration mode
   
