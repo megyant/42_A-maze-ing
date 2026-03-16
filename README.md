@@ -117,7 +117,6 @@ If you need to initiate a virtual environment on unix run:
 ```
 python -m venv venv
 source venv/bin/activate
-
 ```
 
 ### Install and use of the Generator
