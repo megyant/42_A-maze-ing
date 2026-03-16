@@ -148,6 +148,11 @@ maze.grid
 ```
 // Any others?  
 
+### Maze Preview
+
+![Preview1 (captured from project output)](assets/normal_path.png)
+![Preview2 (captured from project output)](assets/neon_path.png)
+
 ## Resources
 - [Jamisbuck's blog](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)  
 - [Maze Generation Wikipedia](https://en.wikipedia.org/wiki/Maze_generation_algorithm)  
