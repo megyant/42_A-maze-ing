@@ -108,7 +108,7 @@ There are some available options to interact with the maze:
   
 ## Code Reusability
 
-For this project the class ```MazeGenerator``` available in the ```MazeGenerator.py``` file can be used as a standalone reusable component. It can be installed via pip:
+For this project the class ```MazeGenerator``` available in the ```MazeGenerator.py``` file and in the ```mazegen-1.0.0-py3.whl``` zip file can be used as a standalone reusable component. It can be installed via pip:
 
 ```
 pip install mazegen-1.0.0-py3-none-any.whl
