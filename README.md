@@ -150,10 +150,10 @@ maze.grid
 
 ### Maze Preview
 Default coloring:
-![Preview1 (captured from project output)](assets/normal_path.png)
+![Preview1 (captured from project output)](assets/normal_path_no_options.png)
 
 Neon coloring:
-![Preview2 (captured from project output)](assets/neon_path.png)
+![Preview2 (captured from project output)](assets/neon_path_no_options.png)
 
 ## Resources
 - [Jamisbuck's blog](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)  
