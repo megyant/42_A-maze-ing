@@ -404,11 +404,11 @@ class MazeGenerator:
 
                 # determine cell content
                 if end_pos and (x, y) == end_pos:
-                    content = f"{color.get("START")} ⦿ {color.get("RESET")}"
+                    content = f"{color.get('START')} ⦿ {color.get('RESET')}"
                 elif (x, y) == start_pos:
-                    content = f"{color.get("END")} ⦿ {color.get("RESET")}"
+                    content = f"{color.get('END')} ⦿ {color.get('RESET')}"
                 elif (x, y) in path_coords:
-                    content = f"{c} ● {color.get("RESET")}"
+                    content = f"{c} ● {color.get('RESET')}"
                 else:
                     content = "   "
 
@@ -464,7 +464,7 @@ class MazeGenerator:
                 else:
                     # dram final bottom boundary
                     char = "╩" if x < self.width - 1 else "╝"
-                    l2 += f"{color.get("MAIN")}═══{char}{color.get("RESET")}"
+                    l2 += f"{color.get('MAIN')}═══{char}{color.get('RESET')}"
 
             # print lines
             print(l1)
