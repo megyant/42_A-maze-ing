@@ -114,7 +114,7 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                     print("Error: Maze size too small to display full '42'"
                           "pattern")
                 if maze.valid_position is False:
-                    print("Error: Not a valid entry or exit position. Can "
+                    print("Error: Not a valid entry or exit position. Can"
                           "not display maze")
                     break
 
