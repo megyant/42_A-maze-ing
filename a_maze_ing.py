@@ -82,6 +82,7 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
     width = int(config.get("WIDTH", 10))
     height = int(config.get("HEIGHT", 10))
     exit_point = format_cords(config.get("EXIT", f"{width - 1}, {height - 1}"))
+    maze.perfect = maze.perfect
 
     try:
         prompt_lines = False
