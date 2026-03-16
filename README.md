@@ -146,7 +146,6 @@ Access grid:
 ```
 maze.grid
 ```
-// Any others?  
 
 ### Maze Preview
 Default coloring:
