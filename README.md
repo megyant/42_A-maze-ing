@@ -1,7 +1,5 @@
 # A-maze-ing
 
-WIP
-
 *This project has been created as a part of the 42 curriculum by <dtalapan>dtalapan, <mbotelho>mbotelho*
 
 **GitHub Profiles**:
