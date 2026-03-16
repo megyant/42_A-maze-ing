@@ -38,7 +38,6 @@ def parse_config(file_path: str) -> Dict[str, Any]:
         with open(file_path, 'r') as f:
             for line_num, line in enumerate(f, 1):
                 line = line.strip()
-                # skip empty lines
                 if not line or line.startswith('#'):
                     continue
                 # ensure it follows kew=value format
