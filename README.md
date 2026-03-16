@@ -113,7 +113,7 @@ For this project the class ```MazeGenerator``` available in the ```MazeGenerator
 pip install mazegen-1.0.0-py3-none-any.whl
 ```
 
-If you need to initiate a virtual environment on unix run:
+If you need to initiate a virtual environment on unix:
 ```
 python -m venv venv
 source venv/bin/activate
