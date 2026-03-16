@@ -142,11 +142,10 @@ path = maze.find_path(start=entry, end=exit)
 
 **Access generated structure:**
 
-Access width, height and seed:
+Access width and height:
 ```
 maze.width
 maze.height
-maze.seed
 ```
 
 Access grid:
