@@ -115,7 +115,8 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                     print("Error: Maze size too small to display full '42'"
                           "pattern")
                 if maze.valid_position is False:
-                    print("Error: Not a valid position.")
+                    print("Error: Not a valid entry or exit position. Can "
+                          "not display maze")
                     break
 
                 maze.render(end_pos=exit_point, start_pos=start_pos)
@@ -134,11 +135,12 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
             elif command == 'per' or command == '--perfect':
                 print("\033[2J\033[H", end="", flush=True)
 
-                print(f"Please create a new maze. Perfect = {maze.perfect}")
                 if maze.perfect:
                     maze.perfect = False
                 else:
                     maze.perfect = True
+
+                print(f"Please create a new maze. Perfect = {maze.perfect}")
 
             elif command == 'c' or command == '--color':
                 print("\033[2J\033[H", end="", flush=True)
