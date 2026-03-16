@@ -110,9 +110,18 @@ There are some available options to interact with the maze:
 ## Code Reusability
 
 For this project the class ```MazeGenerator``` available in the ```MazeGenerator.py``` file can be used as a standalone reusable component. It can be installed via pip:
-  
-//try to turn this into .gz and pip when completed
-  
+
+```
+pip install mazegen-1.0.0-py3-none-any.whl
+```
+
+If you need to initiate a virtual environment on unix run:
+```
+python -m venv venv
+source venv/bin/activate
+
+```
+
 ### Install and use of the Generator
 
 ```
