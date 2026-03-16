@@ -116,6 +116,7 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                           "pattern")
                 if maze.valid_position is False:
                     print("Error: Not a valid position.")
+                    break
 
                 maze.render(end_pos=exit_point, start_pos=start_pos)
                 maze.show_path = False
