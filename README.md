@@ -149,8 +149,10 @@ maze.grid
 // Any others?  
 
 ### Maze Preview
-
+Default coloring:
 ![Preview1 (captured from project output)](assets/normal_path.png)
+
+Neon coloring:
 ![Preview2 (captured from project output)](assets/neon_path.png)
 
 ## Resources
