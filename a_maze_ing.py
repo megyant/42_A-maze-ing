@@ -75,8 +75,9 @@ def format_cords(coord_Str: str) -> Tuple[int, int]:
         sys.exit(1)
 
 
-def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
-               start_pos: Tuple[int, int]) -> None:
+def user_input(maze: "Display_Maze", config: Dict[str, Any],
+               start_pos: Tuple[int, int], output_file,
+               exit: Tuple[int, int]) -> None:
     """ Run an interactive command-line loop. """
     width = int(config.get("WIDTH", 10))
     height = int(config.get("HEIGHT", 10))
@@ -107,6 +108,8 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
                 # rebuild the maze with current settings
                 maze.build()
                 current_path = maze.find_path(start=start_pos, end=exit_point)
+                output_file_fun(maze, output_file, start_pos, exit,
+                                current_path)
                 print("\033[2J\033[H", end="", flush=True)
 
                 # report maze generation errors
@@ -170,7 +173,8 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
         print(f"oops something went wrong: {e}")
 
 
-def output_file_fun(gen: Display_Maze, output_file, entry, exit, path_str) -> None:
+def output_file_fun(gen: Display_Maze, output_file, entry, exit,
+                    path_str) -> None:
     try:
         with open(output_file, 'w') as f:
             for row in gen.grid:
@@ -228,12 +232,14 @@ def main() -> None:
 
         # initialize user interface
         try:
-            user_input(gen, path_str, config, entry)
+            user_input(gen, config, entry, output_file, exit_point)
         except KeyboardInterrupt:
             print("Error: You left user interface.")
 
     except (Exception, ValueError) as e:
         print(f"Error occurred: {e}")
+        import traceback
+        traceback(1)
         sys.exit(1)
 
 
