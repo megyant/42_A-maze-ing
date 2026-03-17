@@ -170,6 +170,19 @@ def user_input(maze: "Display_Maze", path: str, config: Dict[str, Any],
         print(f"oops something went wrong: {e}")
 
 
+def output_file_fun(gen: Display_Maze, output_file, entry, exit, path_str) -> None:
+    try:
+        with open(output_file, 'w') as f:
+            for row in gen.grid:
+                f.write("".join(f"{cell:X}" for cell in row) + "\n")
+            f.write("\n")
+            f.write(f"{entry[0]},{entry[1]}\n")
+            f.write(f"{exit[0]},{exit[1]}\n")
+            f.write(path_str + "\n")
+    except IOError as e:
+        print(f"Error writing to file: {e}")
+
+
 def main() -> None:
     """ Organize maze application. """
     try:
@@ -178,7 +191,7 @@ def main() -> None:
         width = int(config.get("WIDTH", 10))
         height = int(config.get("HEIGHT", 10))
 
-        config.get("OUTPUT_FILE", "output_maze.txt")
+        output_file = config.get("OUTPUT_FILE", "output_maze.txt")
 
         seed = int(config["SEED"]) if "SEED" in config else None
 
@@ -210,6 +223,8 @@ def main() -> None:
 
         # find path
         path_str = gen.find_path(entry, exit_point)
+
+        output_file_fun(gen, output_file, entry, exit_point, path_str)
 
         # initialize user interface
         try:
