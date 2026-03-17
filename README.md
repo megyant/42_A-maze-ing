@@ -210,3 +210,6 @@ Following the architectural phase, we conducted a joint code review to optimize 
  - Maze generation: Only one maze generation algorithm currently supported
  - Pathfinding: Only one pathfinding algorithm implemented
  - Animations: There are no real-time visual animations for the generation or solving processes.
+
+## Completion
+Finished on 17/03 with 96
